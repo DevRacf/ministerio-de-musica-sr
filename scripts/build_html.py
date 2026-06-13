@@ -1,0 +1,374 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Genera el cancionero web (un solo archivo HTML, funciona offline)."""
+import json
+
+songs = json.load(open('datos/songs.json', encoding='utf-8'))
+for i, s in enumerate(songs):
+    s['id'] = i
+
+SECTION_ORDER = ['Alabanza', 'Adoración', 'Exaltación', 'Espíritu Santo', 'María', 'Desagravio', 'Perdón']
+DATA = json.dumps(songs, ensure_ascii=False, separators=(',', ':'))
+
+HTML = r"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cancionero · Nueva Alianza · San Roberto</title>
+<meta name="description" content="Cancionero del Ministerio de Música Nueva Alianza, Sector San Roberto. Funciona sin internet.">
+<style>
+:root{
+  --tinta:#0F4761;        /* teal de los títulos del cancionero impreso */
+  --acorde:#215E99;       /* azul de los acordes */
+  --papel:#FAF7F0;
+  --papel2:#F1ECE0;
+  --texto:#23292C;
+  --suave:#6B7378;
+  --linea:#E2DCCC;
+  --dorado:#C8A24B;
+  --tarjeta:#FFFFFF;
+  --fs:13px;              /* tamaño de la hoja de acordes */
+}
+html[data-theme="oscuro"]{
+  --tinta:#9CCBE0;
+  --acorde:#7FB3E8;
+  --papel:#0C1A21;
+  --papel2:#10242E;
+  --texto:#E5E1D5;
+  --suave:#8C9AA1;
+  --linea:#1E3641;
+  --tarjeta:#11252F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--papel);color:var(--texto);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acorde);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ====== encabezado ====== */
+header{
+  position:sticky;top:0;z-index:10;background:var(--papel);
+  border-bottom:1px solid var(--linea);
+  padding:env(safe-area-inset-top) 0 0;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:12px 16px 8px}
+.cruz{
+  width:34px;height:34px;flex:none;border-radius:7px;background:var(--tinta);
+  display:grid;place-items:center;color:var(--papel);font-weight:700;
+  font-family:ui-monospace,monospace;font-size:19px;
+}
+.brand h1{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:17px;letter-spacing:.02em;color:var(--tinta);line-height:1.1}
+.brand small{display:block;font-family:-apple-system,sans-serif;font-weight:400;font-size:11px;color:var(--suave);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+#btnTema{margin-left:auto;font-size:19px;padding:6px 8px;border-radius:8px}
+.buscar{padding:0 16px 10px}
+.buscar input{
+  width:100%;padding:10px 14px;font-size:16px;border-radius:10px;
+  border:1px solid var(--linea);background:var(--tarjeta);color:var(--texto);
+}
+.buscar input::placeholder{color:var(--suave)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:none;padding:6px 13px;border-radius:999px;font-size:13px;
+  border:1px solid var(--linea);background:var(--tarjeta);color:var(--texto);white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--tinta);border-color:var(--tinta);color:var(--papel)}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px;vertical-align:1px}
+
+/* ====== índice ====== */
+main{max-width:680px;margin:0 auto;padding:8px 12px 60px}
+.sec-h{
+  display:flex;align-items:baseline;gap:10px;margin:22px 4px 8px;
+}
+.sec-h .cinta{width:26px;height:13px;border-radius:0 0 5px 5px;flex:none;transform:translateY(2px)}
+.sec-h h2{font-family:ui-monospace,monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta)}
+.sec-h span{font-size:12px;color:var(--suave)}
+.fila{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;
+  padding:11px 13px;margin-bottom:7px;
+}
+.fila .cinta{width:4px;align-self:stretch;border-radius:4px;flex:none}
+.fila .t{flex:1;min-width:0}
+.fila .t b{font-weight:600;font-size:15px;display:block;line-height:1.25}
+.fila .t i{font-style:normal;font-size:12px;color:var(--suave)}
+.fila .fav{color:var(--dorado);font-size:15px;flex:none}
+.fila .pg{font-family:ui-monospace,monospace;font-size:11px;color:var(--suave);flex:none}
+.vacio{text-align:center;color:var(--suave);padding:48px 16px;font-size:14px;line-height:1.6}
+
+/* ====== vista de canción ====== */
+#cancion{position:fixed;inset:0;z-index:20;background:var(--papel);display:none;flex-direction:column}
+#cancion.abierta{display:flex}
+.c-top{
+  display:flex;align-items:center;gap:6px;padding:10px 10px 8px;
+  padding-top:calc(10px + env(safe-area-inset-top));
+  border-bottom:1px solid var(--linea);background:var(--papel);
+}
+.c-top button{padding:7px 10px;border-radius:8px;font-size:14px}
+#btnVolver{font-weight:600;color:var(--tinta)}
+#btnFav{margin-left:auto;font-size:20px;color:var(--suave)}
+#btnFav.on{color:var(--dorado)}
+.c-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.c-cab{padding:18px 18px 4px;max-width:760px;margin:0 auto;width:100%}
+.c-cab .eyebrow{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--suave);margin-bottom:8px}
+.c-cab .eyebrow .cinta{width:22px;height:10px;border-radius:0 0 4px 4px}
+.c-cab h2{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:var(--tinta);font-size:23px;line-height:1.2;font-weight:700}
+.c-cab .autor{font-size:13px;color:var(--suave);font-style:italic;margin-top:5px}
+.c-herr{
+  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+  padding:12px 18px;max-width:760px;margin:0 auto;width:100%;
+}
+.grupo{display:flex;align-items:center;border:1px solid var(--linea);border-radius:9px;background:var(--tarjeta);overflow:hidden}
+.grupo button{padding:7px 12px;font-size:15px;line-height:1}
+.grupo .val{font-family:ui-monospace,monospace;font-size:12px;min-width:44px;text-align:center;color:var(--suave)}
+.grupo .lbl{font-size:11px;color:var(--suave);padding-left:10px;letter-spacing:.05em}
+#btnAcordes{border:1px solid var(--linea);border-radius:9px;background:var(--tarjeta);padding:7px 12px;font-size:12px;color:var(--texto)}
+#btnAcordes[aria-pressed="false"]{color:var(--suave);text-decoration:line-through}
+.hoja-wrap{padding:4px 18px 80px;max-width:760px;margin:0 auto;width:100%}
+.hoja{
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:var(--fs);line-height:1.45;white-space:pre;overflow-x:auto;
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:12px;
+  padding:18px 16px;
+}
+.hoja .c{color:var(--acorde);font-weight:700}
+.hoja.sin-acordes .c{display:none}
+.hoja .b{display:block;height:1em}
+.hoja.sin-acordes .c + .b{display:none}
+footer{
+  text-align:center;color:var(--suave);font-size:12px;line-height:1.7;
+  padding:26px 20px 40px;border-top:1px solid var(--linea);margin-top:30px;
+}
+footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="cruz" aria-hidden="true">✠</div>
+    <h1>Cancionero<small>Nueva Alianza · San Roberto · 2026</small></h1>
+    <button id="btnTema" title="Cambiar modo claro / oscuro" aria-label="Cambiar modo claro u oscuro">◐</button>
+  </div>
+  <div class="buscar">
+    <input id="q" type="search" placeholder="Buscar por título, letra o autor…" autocomplete="off" aria-label="Buscar canción">
+  </div>
+  <nav class="chips" id="chips" aria-label="Secciones"></nav>
+</header>
+
+<main>
+  <div id="lista"></div>
+  <footer>
+    Ministerio de Música <b>Nueva Alianza</b> · Sector San Roberto Abad<br>
+    103 canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
+  </footer>
+</main>
+
+<section id="cancion" role="dialog" aria-modal="true" aria-labelledby="cTitulo">
+  <div class="c-top">
+    <button id="btnVolver">← Índice</button>
+    <button id="btnFav" aria-label="Marcar como favorita">★</button>
+  </div>
+  <div class="c-scroll" id="cScroll">
+    <div class="c-cab">
+      <div class="eyebrow"><span class="cinta" id="cCinta"></span><span id="cSeccion"></span><span id="cPag"></span></div>
+      <h2 id="cTitulo"></h2>
+      <div class="autor" id="cAutor"></div>
+    </div>
+    <div class="c-herr">
+      <div class="grupo" role="group" aria-label="Transponer tono">
+        <span class="lbl">Tono</span>
+        <button id="tMenos" aria-label="Bajar medio tono">−</button>
+        <span class="val" id="tVal">original</span>
+        <button id="tMas" aria-label="Subir medio tono">＋</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Tamaño de letra">
+        <button id="fMenos" aria-label="Reducir letra" style="font-size:12px">A−</button>
+        <button id="fMas" aria-label="Agrandar letra" style="font-size:17px">A＋</button>
+      </div>
+      <button id="btnAcordes" aria-pressed="true">Acordes</button>
+    </div>
+    <div class="hoja-wrap"><pre class="hoja" id="hoja"></pre></div>
+  </div>
+</section>
+
+<script>
+const SONGS = __DATA__;
+const SECCIONES = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón"];
+const COLOR = {
+  "Alabanza":"#D9912F","Adoración":"#7E5BA6","Exaltación":"#C84B31",
+  "Espíritu Santo":"#D1495B","María":"#4D7FBF","Desagravio":"#5E6B72","Perdón":"#5F8E6E"
+};
+
+/* ---------- almacenamiento seguro ---------- */
+const store = {
+  get(k,d){ try{ const v = localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let favoritas = new Set(store.get('favs', []));
+let fs = store.get('fs', 13);
+document.documentElement.style.setProperty('--fs', fs+'px');
+if (store.get('tema','claro')==='oscuro') document.documentElement.dataset.theme='oscuro';
+
+/* ---------- utilidades ---------- */
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+SONGS.forEach(s => { s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
+
+/* ---------- transposición ---------- */
+const SHARP=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const BASE={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const LAT={Do:'C',Re:'D',Mi:'E',Fa:'F',Sol:'G',La:'A',Si:'B'};
+const LAT_INV={C:'Do','C#':'Do#',D:'Re','D#':'Re#',E:'Mi',F:'Fa','F#':'Fa#',G:'Sol','G#':'Sol#',A:'La','A#':'La#',B:'Si'};
+const ROOT='(?:[A-G](?:##?|bb?)?|(?:Do|Re|Mi|Fa|Sol|La|Si)[#b]?)';
+const QUAL='(?:maj|min|sus|dim|aug|add|m|M|°)?\\d{0,2}(?:sus\\d?|add\\d{0,2}|maj\\d{0,2})?';
+const RE_CHORD=new RegExp('^\\(?\\/{0,4}'+ROOT+QUAL+'(?:\\((?:[b#]?\\d+|'+ROOT+QUAL+')\\))?(?:/'+ROOT+')?\\)?[\\/\\-–]{0,4}[\\*\']?$');
+const RE_SEQ=/^[A-G][#b]?(?:m|M)?\d{0,2}(?:[-–][A-G][#b]?(?:m|M)?\d{0,2})+$/;
+const RE_ROOT=/(Do|Re|Mi|Fa|Sol|La|Si|[A-G])(##?|bb?)?/g;
+
+function shift(root, acc, n){
+  const latin = root.length > 1;
+  const letra = LAT[root] || root;
+  let semi = BASE[letra];
+  if (acc) semi += (acc[0]==='#' ? acc.length : -acc.length);
+  semi = ((semi + n) % 12 + 12) % 12;
+  const nuevo = SHARP[semi];
+  return latin ? LAT_INV[nuevo] : nuevo;
+}
+function transponerLinea(linea, n){
+  if (!n) return linea;
+  return linea.split(/(\s+)/).map(tok=>{
+    if (!tok.trim()) return tok;
+    if (RE_CHORD.test(tok) || RE_SEQ.test(tok))
+      return tok.replace(RE_ROOT, (m, r, a) => shift(r, a||'', n));
+    return tok;
+  }).join('');
+}
+
+/* ---------- índice ---------- */
+const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
+let filtroSec='Todas';
+const chipDefs=['Todas','★ Favoritas',...SECCIONES];
+chipDefs.forEach(c=>{
+  const b=document.createElement('button');
+  b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
+  b.innerHTML = COLOR[c] ? `<span class="dot" style="background:${COLOR[c]}"></span>${c}` : c;
+  b.onclick=()=>{ filtroSec=c; [...$chips.children].forEach(x=>x.setAttribute('aria-pressed', x===b)); render(); };
+  $chips.appendChild(b);
+});
+
+function fila(s){
+  const b=document.createElement('button');
+  b.className='fila';
+  b.innerHTML=`<span class="cinta" style="background:${COLOR[s.section]}"></span>
+    <span class="t"><b>${s.title}</b>${s.author?`<i>${s.author}</i>`:''}</span>
+    ${favoritas.has(s.id)?'<span class="fav">★</span>':''}
+    <span class="pg">p.${s.page}</span>`;
+  b.onclick=()=>abrir(s.id);
+  return b;
+}
+function render(){
+  const q=norm($q.value.trim());
+  const palabras=q.split(/\s+/).filter(Boolean);
+  let canciones=SONGS.filter(s=>{
+    if (filtroSec==='★ Favoritas' && !favoritas.has(s.id)) return false;
+    if (SECCIONES.includes(filtroSec) && s.section!==filtroSec) return false;
+    if (palabras.length && !palabras.every(p=>s._busq.includes(p))) return false;
+    return true;
+  });
+  $lista.innerHTML='';
+  if (!canciones.length){
+    $lista.innerHTML='<div class="vacio">No se encontró ninguna canción.<br>Prueba con otra palabra o revisa la sección elegida.</div>';
+    return;
+  }
+  SECCIONES.forEach(sec=>{
+    const del=canciones.filter(s=>s.section===sec);
+    if (!del.length) return;
+    const h=document.createElement('div'); h.className='sec-h';
+    h.innerHTML=`<span class="cinta" style="background:${COLOR[sec]}"></span><h2>${sec}</h2><span>${del.length}</span>`;
+    $lista.appendChild(h);
+    del.forEach(s=>$lista.appendChild(fila(s)));
+  });
+}
+$q.addEventListener('input', render);
+
+/* ---------- vista de canción ---------- */
+const $vista=document.getElementById('cancion'), $hoja=document.getElementById('hoja');
+let actual=null, trans=0, conAcordes=true;
+
+function pintarHoja(){
+  const s=SONGS[actual];
+  $hoja.innerHTML = s.lines.map(l=>{
+    if (l.k==='b') return '<span class="b"></span>';
+    const t = l.k==='c' ? transponerLinea(l.t, trans) : l.t;
+    const esc = t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return `<span class="${l.k==='c'?'c':'l'}">${esc}</span>\n`;
+  }).join('');
+  document.getElementById('tVal').textContent = trans===0 ? 'original' : (trans>0?'+':'')+trans;
+}
+function abrir(id){
+  actual=id; trans=0;
+  const s=SONGS[id];
+  document.getElementById('cTitulo').textContent=s.title;
+  document.getElementById('cAutor').textContent=s.author||'';
+  document.getElementById('cAutor').style.display=s.author?'':'none';
+  document.getElementById('cSeccion').textContent=s.section;
+  document.getElementById('cPag').textContent='· pág. '+s.page;
+  document.getElementById('cCinta').style.background=COLOR[s.section];
+  document.getElementById('btnFav').classList.toggle('on', favoritas.has(id));
+  pintarHoja();
+  $vista.classList.add('abierta');
+  document.getElementById('cScroll').scrollTop=0;
+  if (location.hash!=='#c'+id) history.pushState(null,'','#c'+id);
+}
+function cerrar(){
+  $vista.classList.remove('abierta');
+  if (location.hash) history.pushState(null,'','#');
+}
+document.getElementById('btnVolver').onclick=cerrar;
+window.addEventListener('popstate', ()=>{
+  const m=location.hash.match(/^#c(\d+)$/);
+  if (m && SONGS[+m[1]]) abrir(+m[1]); else $vista.classList.remove('abierta');
+});
+
+document.getElementById('btnFav').onclick=()=>{
+  if (favoritas.has(actual)) favoritas.delete(actual); else favoritas.add(actual);
+  store.set('favs',[...favoritas]);
+  document.getElementById('btnFav').classList.toggle('on', favoritas.has(actual));
+  render();
+};
+document.getElementById('tMas').onclick=()=>{ trans=Math.min(trans+1,11); pintarHoja(); };
+document.getElementById('tMenos').onclick=()=>{ trans=Math.max(trans-1,-11); pintarHoja(); };
+document.getElementById('fMas').onclick=()=>{ fs=Math.min(fs+1,22); document.documentElement.style.setProperty('--fs',fs+'px'); store.set('fs',fs); };
+document.getElementById('fMenos').onclick=()=>{ fs=Math.max(fs-1,9); document.documentElement.style.setProperty('--fs',fs+'px'); store.set('fs',fs); };
+document.getElementById('btnAcordes').onclick=e=>{
+  conAcordes=!conAcordes;
+  e.currentTarget.setAttribute('aria-pressed', conAcordes);
+  $hoja.classList.toggle('sin-acordes', !conAcordes);
+};
+document.getElementById('btnTema').onclick=()=>{
+  const osc=document.documentElement.dataset.theme==='oscuro';
+  if (osc) delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme='oscuro';
+  store.set('tema', osc?'claro':'oscuro');
+};
+
+render();
+const m=location.hash.match(/^#c(\d+)$/);
+if (m && SONGS[+m[1]]) abrir(+m[1]);
+</script>
+</body>
+</html>
+"""
+
+out = HTML.replace('__DATA__', DATA)
+path = 'salida/Cancionero_Nueva_Alianza_San_Roberto.html'
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(out)
+print(f"OK -> {path} ({len(out)//1024} KB)")
