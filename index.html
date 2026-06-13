@@ -210,6 +210,7 @@ const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(
 SONGS.forEach(s => { s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
 
 /* ---------- transposición ---------- */
+/* ==PURE-START== */
 const SHARP=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 const BASE={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
 const LAT={Do:'C',Re:'D',Mi:'E',Fa:'F',Sol:'G',La:'A',Si:'B'};
@@ -238,6 +239,7 @@ function transponerLinea(linea, n){
     return tok;
   }).join('');
 }
+/* ==PURE-END== */
 
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
