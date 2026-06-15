@@ -2,7 +2,7 @@
 
 Cancionero católico carismático como sitio web. Funciona sin internet una vez descargado.
 
-**Sitio:** https://<usuario>.github.io/ministerio-de-musica-sr/
+**Sitio:** https://devracf.github.io/ministerio-de-musica-sr/
 
 ## Cómo funciona
 
