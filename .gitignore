@@ -2,3 +2,4 @@
 **/.DS_Store
 salida/
 node_modules/
+.claude/
