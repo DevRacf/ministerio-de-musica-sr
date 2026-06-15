@@ -87,7 +87,6 @@ main{max-width:680px;margin:0 auto;padding:8px 12px 60px}
 .fila .t{flex:1;min-width:0}
 .fila .t b{font-weight:600;font-size:15px;display:block;line-height:1.25}
 .fila .t i{font-style:normal;font-size:12px;color:var(--suave)}
-.fila .fav{color:var(--dorado);font-size:15px;flex:none}
 .fila .pg{font-family:ui-monospace,monospace;font-size:11px;color:var(--suave);flex:none}
 .vacio{text-align:center;color:var(--suave);padding:48px 16px;font-size:14px;line-height:1.6}
 
@@ -101,8 +100,6 @@ main{max-width:680px;margin:0 auto;padding:8px 12px 60px}
 }
 .c-top button{padding:7px 10px;border-radius:8px;font-size:14px}
 #btnVolver{font-weight:600;color:var(--tinta)}
-#btnFav{margin-left:auto;font-size:20px;color:var(--suave)}
-#btnFav.on{color:var(--dorado)}
 .c-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
 .c-cab{padding:18px 18px 4px;max-width:760px;margin:0 auto;width:100%}
 .c-cab .eyebrow{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--suave);margin-bottom:8px}
@@ -162,7 +159,6 @@ footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
 <section id="cancion" role="dialog" aria-modal="true" aria-labelledby="cTitulo">
   <div class="c-top">
     <button id="btnVolver">← Índice</button>
-    <button id="btnFav" aria-label="Marcar como favorita">★</button>
   </div>
   <div class="c-scroll" id="cScroll">
     <div class="c-cab">
@@ -201,7 +197,6 @@ const store = {
   get(k,d){ try{ const v = localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
   set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 };
-let favoritas = new Set(store.get('favs', []));
 let fs = store.get('fs', 13);
 document.documentElement.style.setProperty('--fs', fs+'px');
 if (store.get('tema','claro')==='oscuro') document.documentElement.dataset.theme='oscuro';
@@ -251,7 +246,7 @@ function inyectarDatos(src, songs){
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
 let filtroSec='Todas';
-const chipDefs=['Todas','★ Favoritas',...SECCIONES];
+const chipDefs=['Todas',...SECCIONES];
 chipDefs.forEach(c=>{
   const b=document.createElement('button');
   b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
@@ -265,7 +260,6 @@ function fila(s){
   b.className='fila';
   b.innerHTML=`<span class="cinta" style="background:${COLOR[s.section]}"></span>
     <span class="t"><b>${s.title}</b>${s.author?`<i>${s.author}</i>`:''}</span>
-    ${favoritas.has(s.id)?'<span class="fav">★</span>':''}
     <span class="pg">p.${s.page}</span>`;
   b.onclick=()=>abrir(s.id);
   return b;
@@ -274,7 +268,6 @@ function render(){
   const q=norm($q.value.trim());
   const palabras=q.split(/\s+/).filter(Boolean);
   let canciones=SONGS.filter(s=>{
-    if (filtroSec==='★ Favoritas' && !favoritas.has(s.id)) return false;
     if (SECCIONES.includes(filtroSec) && s.section!==filtroSec) return false;
     if (palabras.length && !palabras.every(p=>s._busq.includes(p))) return false;
     return true;
@@ -318,7 +311,6 @@ function abrir(id){
   document.getElementById('cSeccion').textContent=s.section;
   document.getElementById('cPag').textContent='· pág. '+s.page;
   document.getElementById('cCinta').style.background=COLOR[s.section];
-  document.getElementById('btnFav').classList.toggle('on', favoritas.has(id));
   pintarHoja();
   $vista.classList.add('abierta');
   document.getElementById('cScroll').scrollTop=0;
@@ -334,12 +326,6 @@ window.addEventListener('popstate', ()=>{
   if (m && SONGS[+m[1]]) abrir(+m[1]); else $vista.classList.remove('abierta');
 });
 
-document.getElementById('btnFav').onclick=()=>{
-  if (favoritas.has(actual)) favoritas.delete(actual); else favoritas.add(actual);
-  store.set('favs',[...favoritas]);
-  document.getElementById('btnFav').classList.toggle('on', favoritas.has(actual));
-  render();
-};
 document.getElementById('tMas').onclick=()=>{ trans=Math.min(trans+1,11); pintarHoja(); };
 document.getElementById('tMenos').onclick=()=>{ trans=Math.max(trans-1,-11); pintarHoja(); };
 document.getElementById('fMas').onclick=()=>{ fs=Math.min(fs+1,22); document.documentElement.style.setProperty('--fs',fs+'px'); store.set('fs',fs); };
