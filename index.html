@@ -132,6 +132,13 @@ footer{
   padding:26px 20px 40px;border-top:1px solid var(--linea);margin-top:30px;
 }
 footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
+.btn-desc{
+  margin-top:12px;padding:9px 16px;border-radius:10px;
+  border:1px solid var(--tinta);color:var(--tinta);background:var(--tarjeta);
+  font-size:13px;font-weight:600;
+}
+.btn-desc:hover{background:var(--papel2)}
+.btn-desc[disabled]{opacity:.5;cursor:progress}
 </style>
 </head>
 <body>
@@ -152,7 +159,8 @@ footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
   <div id="lista"></div>
   <footer>
     Ministerio de Música <b>Nueva Alianza</b> · Sector San Roberto Abad<br>
-    103 canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
+    Funciona sin internet una vez descargado.<br>
+    <button id="btnDescargar" class="btn-desc">⬇ Descargar para usar sin internet</button>
   </footer>
 </main>
 
@@ -368,6 +376,30 @@ async function iniciar(){
   const m = location.hash.match(/^#c(\d+)$/);
   if (m && SONGS[+m[1]]) abrir(+m[1]);
 }
+async function descargar(){
+  const btn = document.getElementById('btnDescargar');
+  btn.disabled = true; const txt = btn.textContent;
+  btn.textContent = 'Preparando…';
+  try{
+    const resp = await fetch('index.html', {cache:'no-store'});
+    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    const src = await resp.text();
+    const out = '<!DOCTYPE html>\n' + inyectarDatos(src, SONGS).replace(/^<!DOCTYPE html>\s*/i,'');
+    const blob = new Blob([out], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Cancionero_Nueva_Alianza_San_Roberto.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    btn.textContent = '✓ Descargado';
+    setTimeout(()=>{ btn.textContent = txt; btn.disabled = false; }, 2500);
+  }catch(e){
+    btn.textContent = 'No se pudo descargar';
+    setTimeout(()=>{ btn.textContent = txt; btn.disabled = false; }, 2500);
+  }
+}
+document.getElementById('btnDescargar').addEventListener('click', descargar);
 iniciar();
 </script>
 </body>
