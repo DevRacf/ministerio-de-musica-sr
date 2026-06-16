@@ -632,12 +632,20 @@ async function entrarEdicion(){
 }
 function agregarCancion(){ abrirEditor(null); }
 function editarCancion(id){ abrirEditor(id); }
-function borrarCancion(id){
+async function borrarCancion(id){
   const s = SONGS[id];
-  if (!confirm('¿Borrar «'+s.title+'»?')) return;
+  if (!confirm('¿Borrar «'+s.title+'» y publicar el cambio?')) return;
+  const respaldo = SONGS.map(limpiarSong);
   SONGS.splice(id,1);
-  SONGS.forEach((x,i)=> x.id=i);
+  reindexar();
   render();
+  try{
+    await publicar('Borrar: '+s.title);
+  }catch(e){
+    restaurar(respaldo);
+    render();
+    alert(mensajeError(e));
+  }
 }
 /* ---------- formulario del editor ---------- */
 const $editor=document.getElementById('editor'),
@@ -700,15 +708,36 @@ function validarForm(o){
   if (!o.lines.length) return 'El cuerpo está vacío.';
   return '';
 }
-document.getElementById('edGuardar').onclick = ()=>{
+function reindexar(){
+  SONGS.forEach((s,i)=>{ s.id=i; s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
+}
+function restaurar(respaldo){
+  SONGS.length=0; respaldo.forEach((s,i)=> SONGS.push({...s, id:i}));
+  reindexar();
+}
+function mensajeError(e){
+  if (e.message==='token'){ token=''; store.set('ghtoken',''); return 'Token inválido o vencido. Sal de edición y vuelve a entrar para ponerlo de nuevo.'; }
+  if (e.message==='conflicto') return 'Alguien más editó el cancionero. Recarga la página y reintenta (tu texto sigue aquí).';
+  return 'No se pudo publicar (¿sin internet?). Reintenta; tu texto sigue aquí.';
+}
+document.getElementById('edGuardar').onclick = async ()=>{
   const o = objetoDelForm();
   const err = validarForm(o);
   if (err){ $edMsg.className='ed-msg error'; $edMsg.textContent=err; return; }
+  const btn = document.getElementById('edGuardar');
+  btn.disabled = true; $edMsg.className='ed-msg'; $edMsg.textContent='Publicando…';
+  const respaldo = SONGS.map(limpiarSong);
   if (editando!=null) SONGS[editando] = {...o, id:editando};
   else SONGS.push({...o, id:SONGS.length});
-  SONGS.forEach((s,i)=>{ s.id=i; s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
-  render();
-  cerrarEditor();
+  reindexar();
+  try{
+    await publicar((editando!=null?'Editar: ':'Agregar: ')+o.title);
+    render(); cerrarEditor();
+  }catch(e){
+    restaurar(respaldo);
+    $edMsg.className='ed-msg error';
+    $edMsg.textContent = mensajeError(e);
+  }finally{ btn.disabled=false; }
 };
 
 pintarZonaEdicion();
