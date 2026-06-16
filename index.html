@@ -293,6 +293,8 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
 <script>
 const EMBEDDED = null; /* ==EMBED-SLOT== */
 let SONGS = [];
+const EMBEDDED_MIXES = null; /* ==EMBED-MIXES== */
+let MIXES = [];
 const SECCIONES = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón"];
 const COLOR = {
   "Alabanza":"#D9912F","Adoración":"#7E5BA6","Exaltación":"#C84B31",
@@ -347,12 +349,31 @@ function transponerLinea(linea, n){
     return tok;
   }).join('');
 }
-/* Devuelve el src de index.html con las canciones incrustadas en el slot EMBEDDED. */
-function inyectarDatos(src, songs){
-  const slot = 'const EMBEDDED = null; /* ==EMBED-SLOT== */';
-  const relleno = 'const EMBEDDED = ' + JSON.stringify(songs) + '; /* ==EMBED-SLOT== */';
-  if (!src.includes(slot)) throw new Error('No se encontró el slot EMBEDDED');
-  return src.replace(slot, relleno);
+/* Devuelve el src de index.html con canciones y mixes incrustados en sus slots. */
+function inyectarDatos(src, songs, mixes){
+  const slotS = 'const EMBEDDED = null; /* ==EMBED-SLOT== */';
+  const slotM = 'const EMBEDDED_MIXES = null; /* ==EMBED-MIXES== */';
+  if (!src.includes(slotS)) throw new Error('No se encontró el slot EMBEDDED');
+  let out = src.replace(slotS, 'const EMBEDDED = ' + JSON.stringify(songs) + '; /* ==EMBED-SLOT== */');
+  if (src.includes(slotM)) out = out.replace(slotM, 'const EMBEDDED_MIXES = ' + JSON.stringify(mixes||[]) + '; /* ==EMBED-MIXES== */');
+  return out;
+}
+/* resuelve los títulos de un mix a índices de songs; idx=null si no existe */
+function resolverMix(mix, songs){
+  const porTitulo = {};
+  songs.forEach((s,i)=>{ const k=(s.title||'').trim().toLowerCase(); if(!(k in porTitulo)) porTitulo[k]=i; });
+  return (mix.songs||[]).map((t,pos)=>{
+    const idx = porTitulo[(t||'').trim().toLowerCase()];
+    return {pos, title:t, idx: idx==null ? null : idx};
+  });
+}
+/* mueve el elemento i de arr en dirección dir (-1 arriba, +1 abajo); no muta */
+function moverEnLista(arr, i, dir){
+  const j = i + dir;
+  if (j < 0 || j >= arr.length) return arr.slice();
+  const out = arr.slice();
+  [out[i], out[j]] = [out[j], out[i]];
+  return out;
 }
 /* clasifica una línea NO vacía como acordes ('c') o letra ('l') */
 const MARCADORES = new Set(['x2','x3','x4','X2','X3','X4','(x2)','(x3)','(x4)','//','////','|','N.C.','(bis)','bis','*','-','–']);
@@ -558,6 +579,16 @@ async function cargarSongs(){
     return null;
   }
 }
+async function cargarMixes(){
+  if (Array.isArray(EMBEDDED_MIXES)) return EMBEDDED_MIXES;
+  try{
+    const r = await fetch('datos/mixes.json', {cache:'no-store'});
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){
+    return [];
+  }
+}
 async function iniciar(){
   const data = await cargarSongs();
   if (!data){
@@ -570,6 +601,7 @@ async function iniciar(){
   SONGS = data;
   SONGS.forEach((s, i) => { s.id = i; });
   SONGS.forEach(s => { s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
+  MIXES = await cargarMixes();
   render();
   const m = location.hash.match(/^#c(\d+)$/);
   if (m && SONGS[+m[1]]) abrir(+m[1]);
@@ -582,7 +614,7 @@ async function descargar(){
     const resp = await fetch('index.html', {cache:'no-store'});
     if (!resp.ok) throw new Error('HTTP '+resp.status);
     const src = await resp.text();
-    const out = '<!DOCTYPE html>\n' + inyectarDatos(src, SONGS).replace(/^<!DOCTYPE html>\s*/i,'');
+    const out = '<!DOCTYPE html>\n' + inyectarDatos(src, SONGS, MIXES).replace(/^<!DOCTYPE html>\s*/i,'');
     const blob = new Blob([out], {type:'text/html;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
