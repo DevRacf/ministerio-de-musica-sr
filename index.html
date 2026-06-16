@@ -183,6 +183,11 @@ main{max-width:680px;margin:0 auto;padding:var(--s3) var(--s3) 64px}
 .hoja.sin-acordes .c{display:none}
 .hoja .b{display:block;height:1em}
 .hoja.sin-acordes .c + .b{display:none}
+.mix-nav{display:none;gap:8px;max-width:760px;margin:0 auto;padding:0 var(--s5) 96px}
+.mix-nav.on{display:flex}
+.mix-nav button{flex:1;padding:11px;border-radius:var(--r2);border:1px solid var(--linea);background:var(--tarjeta);color:var(--tinta);font-weight:600;font-size:13px}
+.mix-nav button.sig{background:var(--tinta);color:var(--sobre-tinta);border-color:var(--tinta)}
+.mix-nav button[disabled]{opacity:.4}
 /* ====== editor ====== */
 #editor{position:fixed;inset:0;z-index:30;background:var(--papel);display:none;flex-direction:column}
 #editor.abierto{display:flex}
@@ -272,6 +277,7 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
       <button id="btnAcordes" aria-pressed="true">Acordes</button>
     </div>
     <div class="hoja-wrap"><pre class="hoja" id="hoja"></pre></div>
+    <div class="mix-nav" id="mixNav"></div>
   </div>
 </section>
 
@@ -469,7 +475,7 @@ function fila(s){
     <span class="t"><b>${s.title}</b>${s.author?`<i>${s.author}</i>`:''}</span>
     <span class="pg">p.${s.page}</span>
     <span class="chevron" aria-hidden="true">›</span>`;
-  ir.onclick=()=>abrir(s.id);
+  ir.onclick=()=>{ enMix=null; abrir(s.id); };
   div.appendChild(ir);
   if (editMode){
     const acc=document.createElement('div');
@@ -538,13 +544,20 @@ function pintarNuevoMix(){
   const b=document.createElement('button'); b.className='btn-ed'; b.style.margin='0 0 12px';
   b.textContent='➕ Nuevo mix'; b.onclick=()=>abrirEditorMix(null); $lista.appendChild(b);
 }
-function abrirMix(mi,pos){ alert('navegación de mix (M3)'); }
+function abrirMix(mi,pos){
+  const items=resolverMix(MIXES[mi],SONGS).filter(it=>it.idx!=null);
+  if (!items.length){ alert('Este mix no tiene canciones disponibles.'); return; }
+  pos=Math.max(0, Math.min(pos, items.length-1));
+  enMix={mixIdx:mi, pos};
+  abrir(items[pos].idx);
+}
 function abrirEditorMix(mi){ alert('editor de mix (M4)'); }
 function borrarMix(mi){ alert('borrar mix (M4)'); }
 
 /* ---------- vista de canción ---------- */
 const $vista=document.getElementById('cancion'), $hoja=document.getElementById('hoja');
 let actual=null, trans=0, conAcordes=true;
+let enMix=null;   // {mixIdx, pos} cuando se navega dentro de un mix
 
 function pintarHoja(){
   const s=SONGS[actual];
@@ -579,11 +592,36 @@ function abrir(id){
   document.getElementById('cCinta').style.background=COLOR[s.section];
   $vista.classList.add('abierta');
   pintarHoja();
+  pintarMixNav();
   document.getElementById('cScroll').scrollTop=0;
   if (location.hash!=='#c'+id) history.pushState(null,'','#c'+id);
 }
+function pintarMixNav(){
+  const nav=document.getElementById('mixNav');
+  const volver=document.getElementById('btnVolver');
+  if (!enMix){ nav.className='mix-nav'; nav.innerHTML=''; volver.textContent='← Índice'; return; }
+  const items=resolverMix(MIXES[enMix.mixIdx],SONGS).filter(it=>it.idx!=null);
+  volver.textContent='← '+MIXES[enMix.mixIdx].name+'  ('+(enMix.pos+1)+'/'+items.length+')';
+  nav.className='mix-nav on';
+  nav.innerHTML=`<button id="mxAnt" ${enMix.pos===0?'disabled':''}>← Anterior</button>
+                 <button id="mxSig" class="sig" ${enMix.pos===items.length-1?'disabled':''}>Siguiente →</button>`;
+  document.getElementById('mxAnt').onclick=()=>navMix(-1);
+  document.getElementById('mxSig').onclick=()=>navMix(1);
+}
+function navMix(d){
+  if (!enMix) return;
+  const items=resolverMix(MIXES[enMix.mixIdx],SONGS).filter(it=>it.idx!=null);
+  const np=enMix.pos+d;
+  if (np<0 || np>=items.length) return;
+  enMix.pos=np; abrir(items[np].idx);
+}
 function cerrar(){
   $vista.classList.remove('abierta');
+  if (enMix){
+    enMix=null; filtroSec='♫ Mixes';
+    [...$chips.children].forEach(x=>x.setAttribute('aria-pressed', x.textContent.includes('Mixes')));
+    render();
+  }
   if (location.hash) history.pushState(null,'','#');
 }
 document.getElementById('btnVolver').onclick=cerrar;
