@@ -137,6 +137,9 @@ main{max-width:680px;margin:0 auto;padding:var(--s3) var(--s3) 64px}
 .fila-acc .ed:hover{color:var(--tinta);background:var(--tinta-soft)}
 .fila-acc .bo:hover{color:#C84B31;background:var(--papel2)}
 .vacio{text-align:center;color:var(--suave);padding:56px 16px;font-size:14px;line-height:1.7}
+.mx-lista{display:block;font-size:12px;color:var(--suave);line-height:1.7;margin-top:4px}
+.mx-no{text-decoration:line-through;opacity:.7}
+.mix-ir b{color:var(--tinta)}
 
 /* ====== vista de canción ====== */
 #cancion{position:fixed;inset:0;z-index:20;background:var(--papel);display:none;flex-direction:column}
@@ -448,7 +451,7 @@ async function publicar(msg){
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
 let filtroSec='Todas';
-const chipDefs=['Todas',...SECCIONES];
+const chipDefs=['♫ Mixes','Todas',...SECCIONES];
 chipDefs.forEach(c=>{
   const b=document.createElement('button');
   b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
@@ -479,6 +482,7 @@ function fila(s){
   return div;
 }
 function render(){
+  if (filtroSec==='♫ Mixes'){ renderMixes(); return; }
   const q=norm($q.value.trim());
   const palabras=q.split(/\s+/).filter(Boolean);
   let canciones=SONGS.filter(s=>{
@@ -501,6 +505,42 @@ function render(){
   });
 }
 $q.addEventListener('input', render);
+
+/* ---------- vista de Mixes ---------- */
+function renderMixes(){
+  $lista.innerHTML='';
+  if (editMode) pintarNuevoMix();
+  if (!MIXES.length){
+    const v=document.createElement('div'); v.className='vacio';
+    v.innerHTML='Aún no hay mixes.'+(editMode?'<br>Toca “➕ Nuevo mix” para crear uno.':'');
+    $lista.appendChild(v); return;
+  }
+  MIXES.forEach((m,mi)=> $lista.appendChild(filaMix(m,mi)));
+}
+function filaMix(m, mi){
+  const div=document.createElement('div'); div.className='fila';
+  const ir=document.createElement('button'); ir.className='fila-ir mix-ir';
+  const items=resolverMix(m,SONGS);
+  const lista=items.map(it=>`<span class="${it.idx==null?'mx-no':''}">${it.pos+1}. ${it.title}</span>`).join('<br>');
+  ir.innerHTML=`<span class="t"><b>♫ ${m.name}</b><span class="mx-lista">${lista}</span></span><span class="chevron" aria-hidden="true">›</span>`;
+  ir.onclick=()=> abrirMix(mi,0);
+  div.appendChild(ir);
+  if (editMode){
+    const acc=document.createElement('div'); acc.className='fila-acc';
+    acc.innerHTML=`<button class="ed" title="Editar">✎</button><button class="bo" title="Borrar">🗑</button>`;
+    acc.querySelector('.ed').onclick=(e)=>{e.stopPropagation();abrirEditorMix(mi);};
+    acc.querySelector('.bo').onclick=(e)=>{e.stopPropagation();borrarMix(mi);};
+    div.appendChild(acc);
+  }
+  return div;
+}
+function pintarNuevoMix(){
+  const b=document.createElement('button'); b.className='btn-ed'; b.style.margin='0 0 12px';
+  b.textContent='➕ Nuevo mix'; b.onclick=()=>abrirEditorMix(null); $lista.appendChild(b);
+}
+function abrirMix(mi,pos){ alert('navegación de mix (M3)'); }
+function abrirEditorMix(mi){ alert('editor de mix (M4)'); }
+function borrarMix(mi){ alert('borrar mix (M4)'); }
 
 /* ---------- vista de canción ---------- */
 const $vista=document.getElementById('cancion'), $hoja=document.getElementById('hoja');
