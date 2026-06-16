@@ -208,6 +208,16 @@ main{max-width:680px;margin:0 auto;padding:var(--s3) var(--s3) 64px}
 .ed-msg{margin-top:var(--s4);font-size:13px;min-height:1.4em}
 .ed-msg.error{color:#C84B31}
 .ed-msg.ok{color:#5F8E6E}
+#mixEditor{position:fixed;inset:0;z-index:31;background:var(--papel);display:none;flex-direction:column}
+#mixEditor.abierto{display:flex}
+.mx-res{display:flex;flex-direction:column;gap:4px;max-height:170px;overflow:auto;margin-bottom:var(--s3)}
+.mx-res button{text-align:left;padding:8px 10px;border:1px solid var(--linea);background:var(--tarjeta);border-radius:var(--r1);font-size:13px;color:var(--texto)}
+.mx-res button:hover{border-color:var(--tinta)}
+.mx-it{display:flex;align-items:center;gap:8px;background:var(--tarjeta);border:1px solid var(--linea);border-radius:var(--r1);padding:7px 9px;margin-bottom:6px}
+.mx-it .n{font-family:var(--mono);color:var(--suave);font-size:12px}
+.mx-it .tt{flex:1;min-width:0;font-size:13px}
+.mx-it button{color:var(--suave);font-size:16px;padding:2px 6px}
+.mx-it .qu{color:#C84B31}
 footer{
   text-align:center;color:var(--suave);font-size:12px;line-height:1.8;
   padding:var(--s6) var(--s5) calc(var(--s6) + env(safe-area-inset-bottom));
@@ -296,6 +306,22 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
     <div class="ed-prev-tit">Vista previa <small>(toca una línea para cambiar acorde↔letra)</small></div>
     <pre class="hoja" id="edPreview"></pre>
     <div id="edMsg" class="ed-msg"></div>
+  </div>
+</section>
+
+<section id="mixEditor" role="dialog" aria-modal="true">
+  <div class="c-top">
+    <button id="mxCancelar">← Cancelar</button>
+    <button id="mxGuardar" class="btn-ed">Guardar</button>
+  </div>
+  <div class="ed-scroll">
+    <h2 class="ed-h" id="mxTitulo">Nuevo mix</h2>
+    <label class="ed-campo">Nombre<input id="mxNombre" type="text" autocomplete="off"></label>
+    <label class="ed-campo">Agregar canción<input id="mxBuscar" type="text" placeholder="Buscar por título…" autocomplete="off"></label>
+    <div id="mxResultados" class="mx-res"></div>
+    <div class="ed-prev-tit">En el mix</div>
+    <div id="mxLista"></div>
+    <div id="mxMsg" class="ed-msg"></div>
   </div>
 </section>
 
@@ -428,19 +454,20 @@ function repoInfo(){
 }
 function ghHeaders(t){ return {'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; }
 const GH_PATH = 'datos/songs.json';
-async function ghLeer(t){
+const GH_PATH_MIXES = 'datos/mixes.json';
+async function ghLeer(t, path){
   const {owner,repo}=repoInfo();
-  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${GH_PATH}`, {headers:ghHeaders(t), cache:'no-store'});
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {headers:ghHeaders(t), cache:'no-store'});
   if (r.status===401) throw new Error('token');
   if (!r.ok) throw new Error('http '+r.status);
   const j = await r.json();
   const texto = decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
-  return {sha:j.sha, songs:JSON.parse(texto)};
+  return {sha:j.sha, datos:JSON.parse(texto)};
 }
-async function ghEscribir(t, songs, sha, msg){
+async function ghEscribir(t, path, datos, sha, msg){
   const {owner,repo}=repoInfo();
-  const contenido = btoa(unescape(encodeURIComponent(JSON.stringify(songs, null, 1))));
-  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${GH_PATH}`, {
+  const contenido = btoa(unescape(encodeURIComponent(JSON.stringify(datos, null, 1))));
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
     method:'PUT', headers:ghHeaders(t),
     body: JSON.stringify({message:msg, content:contenido, sha})
   });
@@ -450,8 +477,12 @@ async function ghEscribir(t, songs, sha, msg){
   return r.json();
 }
 async function publicar(msg){
-  const {sha} = await ghLeer(token);
-  await ghEscribir(token, SONGS.map(limpiarSong), sha, msg);
+  const {sha} = await ghLeer(token, GH_PATH);
+  await ghEscribir(token, GH_PATH, SONGS.map(limpiarSong), sha, msg);
+}
+async function publicarMixes(msg){
+  const {sha} = await ghLeer(token, GH_PATH_MIXES);
+  await ghEscribir(token, GH_PATH_MIXES, MIXES, sha, msg);
 }
 
 /* ---------- índice ---------- */
@@ -551,8 +582,63 @@ function abrirMix(mi,pos){
   enMix={mixIdx:mi, pos};
   abrir(items[pos].idx);
 }
-function abrirEditorMix(mi){ alert('editor de mix (M4)'); }
-function borrarMix(mi){ alert('borrar mix (M4)'); }
+/* ---------- editor de mixes ---------- */
+const $mixEditor=document.getElementById('mixEditor');
+let mixEditando=null, mixBorrador={name:'',songs:[]};
+function abrirEditorMix(mi){
+  mixEditando=mi;
+  mixBorrador = mi==null ? {name:'',songs:[]} : {name:MIXES[mi].name, songs:[...MIXES[mi].songs]};
+  document.getElementById('mxTitulo').textContent = mi==null?'Nuevo mix':'Editar mix';
+  document.getElementById('mxNombre').value=mixBorrador.name;
+  document.getElementById('mxBuscar').value='';
+  const msg=document.getElementById('mxMsg'); msg.className='ed-msg'; msg.textContent='';
+  pintarMxResultados(''); pintarMxLista();
+  $mixEditor.classList.add('abierto');
+}
+function pintarMxLista(){
+  const c=document.getElementById('mxLista'); c.innerHTML='';
+  mixBorrador.songs.forEach((t,i)=>{
+    const existe = SONGS.some(s=>(s.title||'').trim().toLowerCase()===(t||'').trim().toLowerCase());
+    const d=document.createElement('div'); d.className='mx-it';
+    d.innerHTML=`<span class="n">${i+1}</span><span class="tt ${existe?'':'mx-no'}">${t}</span>
+      <button class="up" title="Subir">↑</button><button class="dn" title="Bajar">↓</button><button class="qu" title="Quitar">✕</button>`;
+    d.querySelector('.up').onclick=()=>{ mixBorrador.songs=moverEnLista(mixBorrador.songs,i,-1); pintarMxLista(); };
+    d.querySelector('.dn').onclick=()=>{ mixBorrador.songs=moverEnLista(mixBorrador.songs,i,1); pintarMxLista(); };
+    d.querySelector('.qu').onclick=()=>{ mixBorrador.songs.splice(i,1); pintarMxLista(); };
+    c.appendChild(d);
+  });
+}
+function pintarMxResultados(q){
+  const c=document.getElementById('mxResultados'); c.innerHTML=''; const nq=norm(q.trim());
+  if (!nq) return;
+  SONGS.filter(s=>norm(s.title).includes(nq)).slice(0,8).forEach(s=>{
+    const b=document.createElement('button'); b.textContent='➕ '+s.title;
+    b.onclick=()=>{ mixBorrador.songs.push(s.title); document.getElementById('mxBuscar').value=''; pintarMxResultados(''); pintarMxLista(); };
+    c.appendChild(b);
+  });
+}
+document.getElementById('mxBuscar').addEventListener('input', e=>pintarMxResultados(e.target.value));
+document.getElementById('mxNombre').addEventListener('input', e=>{ mixBorrador.name=e.target.value; });
+document.getElementById('mxCancelar').onclick=()=>$mixEditor.classList.remove('abierto');
+document.getElementById('mxGuardar').onclick = async ()=>{
+  const msg=document.getElementById('mxMsg');
+  if (!mixBorrador.name.trim()){ msg.className='ed-msg error'; msg.textContent='Falta el nombre.'; return; }
+  if (!mixBorrador.songs.length){ msg.className='ed-msg error'; msg.textContent='Agrega al menos una canción.'; return; }
+  const btn=document.getElementById('mxGuardar'); btn.disabled=true; msg.className='ed-msg'; msg.textContent='Publicando…';
+  const respaldo=JSON.parse(JSON.stringify(MIXES));
+  const obj={name:mixBorrador.name.trim(), songs:[...mixBorrador.songs]};
+  if (mixEditando!=null) MIXES[mixEditando]=obj; else MIXES.push(obj);
+  try{ await publicarMixes('Mix: '+obj.name); $mixEditor.classList.remove('abierto'); render(); }
+  catch(e){ MIXES.length=0; respaldo.forEach(x=>MIXES.push(x)); msg.className='ed-msg error'; msg.textContent=mensajeError(e); }
+  finally{ btn.disabled=false; }
+};
+async function borrarMix(mi){
+  if (!confirm('¿Borrar el mix «'+MIXES[mi].name+'» y publicar?')) return;
+  const respaldo=JSON.parse(JSON.stringify(MIXES));
+  const nombre=MIXES[mi].name; MIXES.splice(mi,1); render();
+  try{ await publicarMixes('Borrar mix: '+nombre); }
+  catch(e){ MIXES.length=0; respaldo.forEach(x=>MIXES.push(x)); render(); alert(mensajeError(e)); }
+}
 
 /* ---------- vista de canción ---------- */
 const $vista=document.getElementById('cancion'), $hoja=document.getElementById('hoja');
@@ -731,7 +817,7 @@ async function entrarEdicion(){
     token = t.trim();
   }
   try{
-    await ghLeer(token);
+    await ghLeer(token, GH_PATH);
   }catch(e){
     token = '';
     alert(e.message==='token'
