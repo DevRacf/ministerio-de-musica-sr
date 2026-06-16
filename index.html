@@ -383,6 +383,45 @@ function limpiarSong(s){
 }
 /* ==PURE-END== */
 
+/* ---------- cliente GitHub (solo en modo edición) ---------- */
+const REPO_FALLBACK = {owner:'DevRacf', repo:'ministerio-de-musica-sr'};
+function repoInfo(){
+  const host = location.hostname;
+  if (host.endsWith('github.io')){
+    const owner = host.split('.')[0];
+    const repo = location.pathname.split('/').filter(Boolean)[0];
+    if (owner && repo) return {owner, repo};
+  }
+  return REPO_FALLBACK;
+}
+function ghHeaders(t){ return {'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; }
+const GH_PATH = 'datos/songs.json';
+async function ghLeer(t){
+  const {owner,repo}=repoInfo();
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${GH_PATH}`, {headers:ghHeaders(t), cache:'no-store'});
+  if (r.status===401) throw new Error('token');
+  if (!r.ok) throw new Error('http '+r.status);
+  const j = await r.json();
+  const texto = decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
+  return {sha:j.sha, songs:JSON.parse(texto)};
+}
+async function ghEscribir(t, songs, sha, msg){
+  const {owner,repo}=repoInfo();
+  const contenido = btoa(unescape(encodeURIComponent(JSON.stringify(songs, null, 1))));
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${GH_PATH}`, {
+    method:'PUT', headers:ghHeaders(t),
+    body: JSON.stringify({message:msg, content:contenido, sha})
+  });
+  if (r.status===401) throw new Error('token');
+  if (r.status===409 || r.status===422) throw new Error('conflicto');
+  if (!r.ok) throw new Error('http '+r.status);
+  return r.json();
+}
+async function publicar(msg){
+  const {sha} = await ghLeer(token);
+  await ghEscribir(token, SONGS.map(limpiarSong), sha, msg);
+}
+
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
 let filtroSec='Todas';
@@ -573,7 +612,24 @@ function pintarZonaEdicion(){
     document.getElementById('btnEntrarEd').onclick = entrarEdicion;
   }
 }
-function entrarEdicion(){ editMode = true; pintarZonaEdicion(); render(); }
+async function entrarEdicion(){
+  if (!token){
+    const t = prompt('Pega tu token de GitHub (fine-grained, con permiso Contents: read/write sobre el repo del cancionero):');
+    if (!t) return;
+    token = t.trim();
+  }
+  try{
+    await ghLeer(token);
+  }catch(e){
+    token = '';
+    alert(e.message==='token'
+      ? 'El token no es válido o no tiene permiso. Crea uno fine-grained con Contents: read/write y reintenta.'
+      : 'No se pudo verificar el token (¿sin internet?). Intenta de nuevo.');
+    return;
+  }
+  store.set('ghtoken', token);
+  editMode = true; pintarZonaEdicion(); render();
+}
 function agregarCancion(){ abrirEditor(null); }
 function editarCancion(id){ abrirEditor(id); }
 function borrarCancion(id){
