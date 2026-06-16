@@ -178,6 +178,26 @@ main{max-width:680px;margin:0 auto;padding:var(--s3) var(--s3) 64px}
 .hoja.sin-acordes .c{display:none}
 .hoja .b{display:block;height:1em}
 .hoja.sin-acordes .c + .b{display:none}
+/* ====== editor ====== */
+#editor{position:fixed;inset:0;z-index:30;background:var(--papel);display:none;flex-direction:column}
+#editor.abierto{display:flex}
+.ed-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;max-width:760px;margin:0 auto;width:100%;padding:var(--s4) var(--s5) 80px}
+.ed-h{font-family:var(--mono);color:var(--tinta);font-size:20px;margin-bottom:var(--s4)}
+.ed-campo{display:block;font-size:12px;color:var(--suave);margin-bottom:var(--s4);font-weight:600}
+.ed-campo input,.ed-campo select,.ed-campo textarea{
+  display:block;width:100%;margin-top:6px;padding:10px 12px;font-size:15px;
+  border:1px solid var(--linea);border-radius:var(--r1);background:var(--tarjeta);color:var(--texto);
+  font-weight:400;
+}
+.ed-campo textarea{font-family:var(--mono);font-size:13px;line-height:1.5;white-space:pre;overflow-x:auto;resize:vertical}
+.ed-prev-tit{font-size:12px;color:var(--suave);font-weight:600;margin:var(--s4) 0 var(--s2)}
+.ed-prev-tit small{font-weight:400}
+#edPreview{cursor:pointer}
+#edPreview .c{color:var(--acorde);font-weight:700}
+#edPreview .b{display:block;height:1em}
+.ed-msg{margin-top:var(--s4);font-size:13px;min-height:1.4em}
+.ed-msg.error{color:#C84B31}
+.ed-msg.ok{color:#5F8E6E}
 footer{
   text-align:center;color:var(--suave);font-size:12px;line-height:1.8;
   padding:var(--s6) var(--s5) calc(var(--s6) + env(safe-area-inset-bottom));
@@ -247,6 +267,24 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
       <button id="btnAcordes" aria-pressed="true">Acordes</button>
     </div>
     <div class="hoja-wrap"><pre class="hoja" id="hoja"></pre></div>
+  </div>
+</section>
+
+<section id="editor" role="dialog" aria-modal="true" aria-labelledby="edTitulo">
+  <div class="c-top">
+    <button id="edCancelar">← Cancelar</button>
+    <button id="edGuardar" class="btn-ed">Guardar</button>
+  </div>
+  <div class="ed-scroll">
+    <h2 id="edTitulo" class="ed-h">Nueva canción</h2>
+    <label class="ed-campo">Título<input id="edTitle" type="text" autocomplete="off"></label>
+    <label class="ed-campo">Autor (opcional)<input id="edAutor" type="text" autocomplete="off"></label>
+    <label class="ed-campo">Sección<select id="edSeccion"></select></label>
+    <label class="ed-campo">Acordes y letra (acordes en su propia línea, encima de la letra)
+      <textarea id="edCuerpo" rows="10" spellcheck="false"></textarea></label>
+    <div class="ed-prev-tit">Vista previa <small>(toca una línea para cambiar acorde↔letra)</small></div>
+    <pre class="hoja" id="edPreview"></pre>
+    <div id="edMsg" class="ed-msg"></div>
   </div>
 </section>
 
@@ -545,7 +583,77 @@ function borrarCancion(id){
   SONGS.forEach((x,i)=> x.id=i);
   render();
 }
-function abrirEditor(id){ alert('Editor en construcción (Task 3). id='+id); }
+/* ---------- formulario del editor ---------- */
+const $editor=document.getElementById('editor'),
+      $edTitle=document.getElementById('edTitle'), $edAutor=document.getElementById('edAutor'),
+      $edSeccion=document.getElementById('edSeccion'), $edCuerpo=document.getElementById('edCuerpo'),
+      $edPreview=document.getElementById('edPreview'), $edMsg=document.getElementById('edMsg'),
+      $edTitulo=document.getElementById('edTitulo');
+SECCIONES.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; $edSeccion.appendChild(o); });
+
+let edOverrides = {};   // {indiceLinea: 'c'|'l'} forzado por el usuario
+function edLineas(){
+  const base = textoALineas($edCuerpo.value);
+  return base.map((l,i)=> (l.k!=='b' && edOverrides[i]) ? {k:edOverrides[i], t:l.t} : l);
+}
+function pintarPreview(){
+  const lines = edLineas();
+  $edPreview.innerHTML = lines.map((l,i)=>{
+    if (l.k==='b') return '<span class="b"></span>';
+    const esc = l.t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return `<span class="${l.k==='c'?'c':'l'}" data-i="${i}">${esc}</span>\n`;
+  }).join('');
+}
+$edCuerpo.addEventListener('input', ()=>{ edOverrides={}; pintarPreview(); });
+$edPreview.addEventListener('click', e=>{
+  const sp = e.target.closest('span[data-i]'); if (!sp) return;
+  const i = +sp.dataset.i; const lines = edLineas();
+  if (lines[i].k==='b') return;
+  edOverrides[i] = lines[i].k==='c' ? 'l' : 'c';
+  pintarPreview();
+});
+function abrirEditor(id){
+  editando = id;
+  edOverrides = {}; $edMsg.className='ed-msg'; $edMsg.textContent='';
+  if (id==null){
+    $edTitulo.textContent='Nueva canción';
+    $edTitle.value=''; $edAutor.value=''; $edSeccion.value=SECCIONES[0]; $edCuerpo.value='';
+  } else {
+    const s=SONGS[id];
+    $edTitulo.textContent='Editar canción';
+    $edTitle.value=s.title; $edAutor.value=s.author||''; $edSeccion.value=s.section;
+    $edCuerpo.value=lineasATexto(s.lines);
+  }
+  pintarPreview();
+  $editor.classList.add('abierto');
+}
+function cerrarEditor(){ $editor.classList.remove('abierto'); editando=null; }
+document.getElementById('edCancelar').onclick=cerrarEditor;
+
+function objetoDelForm(){
+  return {
+    title: $edTitle.value.trim(),
+    author: $edAutor.value.trim(),
+    section: $edSeccion.value,
+    page: (editando!=null ? (SONGS[editando].page||0) : 0),
+    lines: edLineas(),
+  };
+}
+function validarForm(o){
+  if (!o.title) return 'Falta el título.';
+  if (!o.lines.length) return 'El cuerpo está vacío.';
+  return '';
+}
+document.getElementById('edGuardar').onclick = ()=>{
+  const o = objetoDelForm();
+  const err = validarForm(o);
+  if (err){ $edMsg.className='ed-msg error'; $edMsg.textContent=err; return; }
+  if (editando!=null) SONGS[editando] = {...o, id:editando};
+  else SONGS.push({...o, id:SONGS.length});
+  SONGS.forEach((s,i)=>{ s.id=i; s._busq = norm(s.title+' '+(s.author||'')+' '+s.lines.map(l=>l.t).join(' ')); });
+  render();
+  cerrarEditor();
+};
 
 pintarZonaEdicion();
 iniciar();
