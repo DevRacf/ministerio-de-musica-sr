@@ -297,6 +297,35 @@ function inyectarDatos(src, songs){
   if (!src.includes(slot)) throw new Error('No se encontró el slot EMBEDDED');
   return src.replace(slot, relleno);
 }
+/* clasifica una línea NO vacía como acordes ('c') o letra ('l') */
+const MARCADORES = new Set(['x2','x3','x4','X2','X3','X4','(x2)','(x3)','(x4)','//','////','|','N.C.','(bis)','bis','*','-','–']);
+function esTokenAcorde(tk){ return MARCADORES.has(tk) || RE_CHORD.test(tk) || RE_SEQ.test(tk); }
+function clasificarLinea(t){
+  const toks = t.trim().split(/\s+/).filter(Boolean);
+  if (!toks.length) return 'l';
+  let n = 0; for (const tk of toks) if (esTokenAcorde(tk)) n++;
+  return n / toks.length >= 0.5 ? 'c' : 'l';
+}
+/* convierte el texto del editor en líneas {k,t}; línea vacía -> blanco;
+   recorta blancos al inicio y al final */
+function textoALineas(texto){
+  const out = texto.replace(/\r/g,'').split('\n').map(raw=>{
+    const t = raw.replace(/\s+$/,'');
+    if (!t.trim()) return {k:'b', t:''};
+    return {k: clasificarLinea(t), t};
+  });
+  while (out.length && out[0].k==='b') out.shift();
+  while (out.length && out[out.length-1].k==='b') out.pop();
+  return out;
+}
+/* inverso: líneas -> texto (blanco -> línea vacía) */
+function lineasATexto(lines){
+  return lines.map(l => l.k==='b' ? '' : l.t).join('\n');
+}
+/* quita campos de runtime (id, _busq) para guardar */
+function limpiarSong(s){
+  return {title:s.title, author:s.author||'', section:s.section, page:s.page||0, lines:s.lines};
+}
 /* ==PURE-END== */
 
 /* ---------- índice ---------- */
