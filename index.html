@@ -237,6 +237,16 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
 .btn-ed{margin-top:var(--s3);margin-left:6px;margin-right:6px;padding:9px 14px;border-radius:var(--r2);border:1px solid var(--tinta);background:var(--tinta);color:var(--sobre-tinta);font-size:13px;font-weight:600}
 .btn-ed.plano{background:var(--tarjeta);color:var(--tinta)}
 .btn-ed:hover{box-shadow:var(--sombra-alta)}
+
+/* ====== sección Ensayo ====== */
+.ensayo-sab{margin-bottom:var(--s6)}
+.ensayo-sab h3{font-size:13px;font-weight:700;color:var(--tinta);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--s3);padding:var(--s3) var(--s4);background:var(--tinta-soft);border-radius:var(--r1)}
+.ensayo-fila{display:flex;align-items:center;gap:var(--s2);padding:10px var(--s4);border-bottom:1px solid var(--linea)}
+.ensayo-num{width:22px;flex:none;color:var(--suave);font-size:12px;font-family:var(--mono);text-align:right}
+.ensayo-btn{flex:1;text-align:left;padding:2px 0;font-size:14px;font-weight:600;line-height:1.3}
+.ensayo-btn:hover{color:var(--tinta)}
+.ensayo-autor{font-weight:400;color:var(--suave);font-size:12px;display:block;margin-top:1px}
+.ensayo-sec{font-size:11px;color:var(--suave);flex:none;text-align:right;min-width:80px}
 </style>
 </head>
 <body>
@@ -488,7 +498,7 @@ async function publicarMixes(msg){
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
 let filtroSec='Todas';
-const chipDefs=['♫ Mixes','Todas',...SECCIONES];
+const chipDefs=['📅 Ensayo','♫ Mixes','Todas',...SECCIONES];
 chipDefs.forEach(c=>{
   const b=document.createElement('button');
   b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
@@ -519,6 +529,7 @@ function fila(s){
   return div;
 }
 function render(){
+  if (filtroSec==='📅 Ensayo'){ renderEnsayo(); return; }
   if (filtroSec==='♫ Mixes'){ renderMixes(); return; }
   const q=norm($q.value.trim());
   const palabras=q.split(/\s+/).filter(Boolean);
@@ -542,6 +553,65 @@ function render(){
   });
 }
 $q.addEventListener('input', render);
+
+/* ---------- Ensayo ---------- */
+function seededRand(seed){
+  seed = seed | 0;
+  return function(){
+    seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function proximosSabados(n){
+  const dias=[], hoy=new Date();
+  const d=new Date(hoy.getFullYear(),hoy.getMonth(),hoy.getDate());
+  d.setDate(d.getDate()+((6-d.getDay()+7)%7));
+  while(dias.length<n){ dias.push(new Date(d)); d.setDate(d.getDate()+7); }
+  return dias;
+}
+function cancionesEnsayo(fecha){
+  const seed=(fecha.getFullYear()*10000+(fecha.getMonth()+1)*100+fecha.getDate())|0;
+  const rand=seededRand(seed);
+  const CUOTA={"Alabanza":2,"Adoración":2,"Exaltación":3,"Espíritu Santo":2,"María":1,"Desagravio":1,"Perdón":1};
+  const out=[];
+  for(const [sec,n] of Object.entries(CUOTA)){
+    const pool=SONGS.filter(s=>s.section===sec);
+    const sh=pool.slice();
+    for(let i=sh.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[sh[i],sh[j]]=[sh[j],sh[i]];}
+    out.push(...sh.slice(0,Math.min(n,pool.length)));
+  }
+  return out;
+}
+const MESES_ES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function fmtFecha(d){ return `${d.getDate()} de ${MESES_ES[d.getMonth()]} de ${d.getFullYear()}`; }
+function esHoy(d){ const h=new Date(); return d.getDate()===h.getDate()&&d.getMonth()===h.getMonth()&&d.getFullYear()===h.getFullYear(); }
+
+function renderEnsayo(){
+  $lista.innerHTML='';
+  const sabados=proximosSabados(3);
+  sabados.forEach((sab,si)=>{
+    const canciones=cancionesEnsayo(sab);
+    const bloque=document.createElement('div'); bloque.className='ensayo-sab';
+    const h3=document.createElement('h3');
+    const etiq=esHoy(sab)?'Hoy':si===0?'Próximo':'';
+    h3.textContent='Sábado '+fmtFecha(sab)+(etiq?' — '+etiq:'');
+    bloque.appendChild(h3);
+    canciones.forEach((s,i)=>{
+      const row=document.createElement('div'); row.className='ensayo-fila';
+      const num=document.createElement('span'); num.className='ensayo-num'; num.textContent=(i+1)+'.';
+      const btn=document.createElement('button'); btn.className='ensayo-btn';
+      const cinta=`<span style="display:inline-block;width:4px;height:13px;border-radius:2px;background:${COLOR[s.section]};vertical-align:-2px;margin-right:6px"></span>`;
+      btn.innerHTML=cinta+s.title+(s.author?`<span class="ensayo-autor">${s.author}</span>`:'');
+      btn.onclick=()=>{ enMix=null; abrir(s.id); };
+      const sec=document.createElement('span'); sec.className='ensayo-sec'; sec.textContent=s.section;
+      row.appendChild(num); row.appendChild(btn); row.appendChild(sec);
+      bloque.appendChild(row);
+    });
+    $lista.appendChild(bloque);
+  });
+}
 
 /* ---------- vista de Mixes ---------- */
 function renderMixes(){
