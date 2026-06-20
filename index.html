@@ -574,9 +574,17 @@ function proximosSabados(n){
 function cancionesEnsayo(fecha){
   const seed=(fecha.getFullYear()*10000+(fecha.getMonth()+1)*100+fecha.getDate())|0;
   const rand=seededRand(seed);
-  const CUOTA={"Alabanza":2,"Adoración":2,"Exaltación":3,"Espíritu Santo":2,"María":1,"Desagravio":1,"Perdón":1};
+  // Número de semana desde época fija (sábado 4 ene 2025)
+  const EPOCH=new Date(2025,0,4);
+  const wk=Math.round((fecha-EPOCH)/(7*24*3600*1000));
+  // Cuota base — 12 canciones siempre
+  const cuota={Alabanza:3,Adoración:2,Exaltación:3,'Espíritu Santo':2,María:1};
+  // Desagravio (1 canción): aparece 1 de cada 4 semanas; el resto → +1 Alabanza
+  if(wk%4===0) cuota.Desagravio=1; else cuota.Alabanza++;
+  // Perdón (2 canciones): aparece 1 de cada 2 semanas; el resto → +1 Exaltación
+  if(wk%2===0) cuota.Perdón=1; else cuota.Exaltación++;
   const out=[];
-  for(const [sec,n] of Object.entries(CUOTA)){
+  for(const [sec,n] of Object.entries(cuota)){
     const pool=SONGS.filter(s=>s.section===sec);
     const sh=pool.slice();
     for(let i=sh.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[sh[i],sh[j]]=[sh[j],sh[i]];}
