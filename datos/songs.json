@@ -25510,5 +25510,37 @@
     "t": "Millares es inconfundible"
    }
   ]
+ },
+ {
+  "title": "Jesús perdóname",
+  "author": "",
+  "section": "Perdón",
+  "page": 0,
+  "lines": [
+   {"k":"c","t":"G  C  D"},
+   {"k":"l","t":"Jesús"},
+   {"k":"c","t":"      G"},
+   {"k":"l","t":"libérame"},
+   {"k":"c","t":"   C  D"},
+   {"k":"l","t":"Jesús"},
+   {"k":"c","t":"      G"},
+   {"k":"l","t":"Lávame"},
+   {"k":"b","t":""},
+   {"k":"c","t":"   C  D"},
+   {"k":"l","t":"Jesús"},
+   {"k":"c","t":"      G"},
+   {"k":"l","t":"Purifícame"},
+   {"k":"c","t":"   C  D"},
+   {"k":"l","t":"Jesús"},
+   {"k":"c","t":"      G"},
+   {"k":"l","t":"Perdóname"},
+   {"k":"b","t":""},
+   {"k":"c","t":"               Em"},
+   {"k":"l","t":"Perdóname, perdóname"},
+   {"k":"c","t":"   C              D"},
+   {"k":"l","t":"mi Señor y mi Dios"},
+   {"k":"c","t":"   G"},
+   {"k":"l","t":"Perdóname"}
+  ]
  }
 ]
