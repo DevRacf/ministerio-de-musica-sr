@@ -340,10 +340,10 @@ const EMBEDDED = null; /* ==EMBED-SLOT== */
 let SONGS = [];
 const EMBEDDED_MIXES = null; /* ==EMBED-MIXES== */
 let MIXES = [];
-const SECCIONES = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón"];
+const SECCIONES = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón","Entrega"];
 const COLOR = {
   "Alabanza":"#D9912F","Adoración":"#7E5BA6","Exaltación":"#C84B31",
-  "Espíritu Santo":"#D1495B","María":"#4D7FBF","Desagravio":"#5E6B72","Perdón":"#5F8E6E"
+  "Espíritu Santo":"#D1495B","María":"#4D7FBF","Desagravio":"#5E6B72","Perdón":"#5F8E6E","Entrega":"#3A8A7E"
 };
 
 /* ---------- almacenamiento seguro ---------- */
@@ -578,11 +578,13 @@ function cancionesEnsayo(fecha){
   const EPOCH=new Date(2025,0,4);
   const wk=Math.round((fecha-EPOCH)/(7*24*3600*1000));
   // Cuota base — 12 canciones siempre
-  const cuota={Alabanza:3,Adoración:2,Exaltación:3,'Espíritu Santo':2,María:1};
+  const cuota={Alabanza:2,Adoración:2,Exaltación:3,'Espíritu Santo':2,María:1};
   // Desagravio (1 canción): aparece 1 de cada 4 semanas; el resto → +1 Alabanza
   if(wk%4===0) cuota.Desagravio=1; else cuota.Alabanza++;
   // Perdón (2 canciones): aparece 1 de cada 2 semanas; el resto → +1 Exaltación
   if(wk%2===0) cuota.Perdón=1; else cuota.Exaltación++;
+  // Entrega (2 canciones): aparece en semanas impares; el resto → +1 Adoración
+  if(wk%2===1) cuota.Entrega=1; else cuota.Adoración++;
   const out=[];
   for(const [sec,n] of Object.entries(cuota)){
     const pool=SONGS.filter(s=>s.section===sec);
