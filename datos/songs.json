@@ -18843,7 +18843,7 @@
   "lines": [
    {
     "k": "c",
-    "t": "Intro: G - Em - G - D"
+    "t": "Intro: Db - Ab - Fm7 - Eb"
    },
    {
     "k": "b",
@@ -18855,7 +18855,7 @@
    },
    {
     "k": "c",
-    "t": "    G"
+    "t": "    Db"
    },
    {
     "k": "l",
@@ -18863,7 +18863,7 @@
    },
    {
     "k": "c",
-    "t": "               Em"
+    "t": "               Ab"
    },
    {
     "k": "l",
@@ -18871,7 +18871,7 @@
    },
    {
     "k": "c",
-    "t": "       G"
+    "t": "       Fm7"
    },
    {
     "k": "l",
@@ -18879,7 +18879,7 @@
    },
    {
     "k": "c",
-    "t": "            D"
+    "t": "            Eb"
    },
    {
     "k": "l",
@@ -18887,7 +18887,7 @@
    },
    {
     "k": "c",
-    "t": "        G"
+    "t": "        Db"
    },
    {
     "k": "l",
@@ -18895,7 +18895,7 @@
    },
    {
     "k": "c",
-    "t": "       Em"
+    "t": "       Ab"
    },
    {
     "k": "l",
@@ -18903,7 +18903,7 @@
    },
    {
     "k": "c",
-    "t": "            G"
+    "t": "            Fm7"
    },
    {
     "k": "l",
@@ -18911,7 +18911,7 @@
    },
    {
     "k": "c",
-    "t": "      D"
+    "t": "      Eb"
    },
    {
     "k": "l",
@@ -18927,7 +18927,7 @@
    },
    {
     "k": "c",
-    "t": "      Em"
+    "t": "      Fm"
    },
    {
     "k": "l",
@@ -18935,7 +18935,7 @@
    },
    {
     "k": "c",
-    "t": "           C"
+    "t": "           Db"
    },
    {
     "k": "l",
@@ -18947,7 +18947,7 @@
    },
    {
     "k": "c",
-    "t": "   G       D"
+    "t": "   Ab       Eb/G"
    },
    {
     "k": "l",
@@ -18958,12 +18958,12 @@
     "t": ""
    },
    {
-    "k": "l",
+    "k": "c",
     "t": "Coro:"
    },
    {
     "k": "c",
-    "t": "          Em"
+    "t": "             Fm"
    },
    {
     "k": "l",
@@ -18971,7 +18971,7 @@
    },
    {
     "k": "c",
-    "t": "          C"
+    "t": "             Db"
    },
    {
     "k": "l",
@@ -18979,7 +18979,7 @@
    },
    {
     "k": "c",
-    "t": "          G"
+    "t": "                    Ab"
    },
    {
     "k": "l",
@@ -18987,7 +18987,7 @@
    },
    {
     "k": "c",
-    "t": "          D"
+    "t": "         Eb"
    },
    {
     "k": "l",
@@ -18995,35 +18995,39 @@
    },
    {
     "k": "c",
-    "t": "          Em"
+    "t": "            Fm7"
    },
    {
     "k": "l",
     "t": "Te suelto mis planes"
    },
    {
-    "k": "c",
-    "t": "          C"
-   },
-   {
-    "k": "l",
-    "t": "Te suelto mis decisiones"
+    "k": "b",
+    "t": ""
    },
    {
     "k": "c",
-    "t": "          G"
+    "t": "                Db"
    },
    {
     "k": "l",
-    "t": "Toma el control de mi vida"
+    "t": " Te suelto mis decisiones"
    },
    {
     "k": "c",
-    "t": "          D"
+    "t": "                    Ab"
    },
    {
     "k": "l",
-    "t": "Tu plan anhelo no más que el mío"
+    "t": " Toma el control de mi vida"
+   },
+   {
+    "k": "c",
+    "t": "          Eb"
+   },
+   {
+    "k": "l",
+    "t": " Tu plan anhelo no más que el mío"
    },
    {
     "k": "b",
@@ -19035,7 +19039,7 @@
    },
    {
     "k": "c",
-    "t": " Am"
+    "t": " Bbm7"
    },
    {
     "k": "l",
@@ -19043,7 +19047,7 @@
    },
    {
     "k": "c",
-    "t": " C"
+    "t": " Db        Fm"
    },
    {
     "k": "l",
@@ -19051,7 +19055,7 @@
    },
    {
     "k": "c",
-    "t": "             Em"
+    "t": "                     Eb"
    },
    {
     "k": "l",
@@ -19059,7 +19063,7 @@
    },
    {
     "k": "c",
-    "t": "             D"
+    "t": "                    Bbm7"
    },
    {
     "k": "l",
@@ -19067,7 +19071,7 @@
    },
    {
     "k": "c",
-    "t": " Am"
+    "t": "                   Db"
    },
    {
     "k": "l",
@@ -19075,7 +19079,7 @@
    },
    {
     "k": "c",
-    "t": " C"
+    "t": "          Fm"
    },
    {
     "k": "l",
@@ -19083,7 +19087,7 @@
    },
    {
     "k": "c",
-    "t": "           Em"
+    "t": "                     Eb"
    },
    {
     "k": "l",
@@ -19091,15 +19095,15 @@
    },
    {
     "k": "c",
-    "t": "           D"
+    "t": "                       Db"
    },
    {
     "k": "l",
     "t": " Lo que Tu tienes es mejor"
    },
    {
-    "k": "b",
-    "t": ""
+    "k": "c",
+    "t": "        Ab                 Eb/G"
    },
    {
     "k": "l",
@@ -19119,7 +19123,7 @@
    },
    {
     "k": "c",
-    "t": "        Em"
+    "t": "            Fm7"
    },
    {
     "k": "l",
@@ -19127,7 +19131,7 @@
    },
    {
     "k": "c",
-    "t": "        C"
+    "t": "            Db"
    },
    {
     "k": "l",
@@ -19135,7 +19139,7 @@
    },
    {
     "k": "c",
-    "t": "         G"
+    "t": "                    Ab"
    },
    {
     "k": "l",
@@ -19143,7 +19147,7 @@
    },
    {
     "k": "c",
-    "t": "         D"
+    "t": "          Eb"
    },
    {
     "k": "l",
@@ -19151,7 +19155,7 @@
    },
    {
     "k": "c",
-    "t": "           Em"
+    "t": "               Fm"
    },
    {
     "k": "l",
@@ -19159,63 +19163,67 @@
    },
    {
     "k": "c",
-    "t": "           C"
+    "t": "               Db"
    },
    {
     "k": "l",
-    "t": " Te suelto mis decisiones"
+    "t": "Te suelto mis decisiones"
    },
    {
     "k": "c",
-    "t": "           G"
+    "t": "                    Ab"
    },
    {
     "k": "l",
-    "t": " Toma el control de mi vida"
+    "t": "Toma el control de mi vida"
    },
    {
     "k": "c",
-    "t": "           D"
+    "t": "         Eb"
    },
    {
     "k": "l",
-    "t": " Tu plan anhelo más que el mío"
+    "t": "Tu plan anhelo más que el mío"
    },
    {
     "k": "c",
-    "t": "           Em"
+    "t": "              Fm7-Eb/G-Ab"
    },
    {
     "k": "l",
-    "t": " Te suelto mis planes"
+    "t": "Te suelto mis planes"
    },
    {
     "k": "c",
-    "t": "           C"
+    "t": "              Db"
    },
    {
     "k": "l",
-    "t": " Te suelto mis fallas"
+    "t": "Te suelto mis fallas"
    },
    {
     "k": "c",
-    "t": "           G"
+    "t": "                    Ab/C"
    },
    {
     "k": "l",
-    "t": " Toma el control de mi vida"
-   },
-   {
-    "k": "c",
-    "t": "           D"
-   },
-   {
-    "k": "l",
-    "t": " Tu plan anhelo más que el mío"
+    "t": "Toma el control de mi vida"
    },
    {
     "k": "b",
     "t": ""
+   },
+   {
+    "k": "c",
+    "t": "          Eb"
+   },
+   {
+    "k": "l",
+    "t": " Tu plan anhelo más que el mío"
+   },
+   {
+    "k": "c",
+    "t": "  Db"
    },
    {
     "k": "l",
@@ -25508,6 +25516,110 @@
    {
     "k": "l",
     "t": "y allí siempre viviré"
+   }
+  ]
+ },
+ {
+  "title": "Levántate Señor",
+  "author": "Paul Wilbur",
+  "section": "Alabanza",
+  "page": 0,
+  "lines": [
+   {
+    "k": "c",
+    "t": "Intro: Am F G C F Dm Esus4 E E"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "       Am      F    G              Am    Dm  Em  F   G"
+   },
+   {
+    "k": "l",
+    "t": "//Levántate,   Levántate Señor"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "       Am      F    G              Am    Am  G   F   Em"
+   },
+   {
+    "k": "l",
+    "t": "Levántate,   Levántate Señor"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "Dm         G              Am  Dm          G             Am"
+   },
+   {
+    "k": "l",
+    "t": "Tus enemigos se alejen,    los justos en Ti se alegren"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "F       E    Am  G   F   Em Dm    G    Esus4 Am    Dm G Am"
+   },
+   {
+    "k": "l",
+    "t": "Si se alegraran  con go-zo victorioso es      Él//"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "l",
+    "t": "(Sube un tono)"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "       Bm      G    A              Bm    Em  F#m  G   A"
+   },
+   {
+    "k": "l",
+    "t": "//Levántate,   Levántate Señor"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "       Bm      G    A              Bm    G"
+   },
+   {
+    "k": "l",
+    "t": "Levántate,   Levántate Señor"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "   A            Bm G   A           Bm G    A            Bm"
+   },
+   {
+    "k": "l",
+    "t": "Levántate Señor,   Levántate Señor    Levántate Señor"
    }
   ]
  }
