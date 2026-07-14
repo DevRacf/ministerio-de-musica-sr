@@ -50,7 +50,7 @@ html[data-theme="oscuro"]{
   --sombra-alta:0 8px 28px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-.fila,.chip,.btn-desc,.grupo button,#btnAcordes,#btnTema,.buscar input{transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease,transform .08s ease}
+.fila,.chip,.btn-desc,.grupo button,#btnAcordes,#btnTema,.modo-sel button,.buscar input{transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease,transform .08s ease}
 html{height:100%}body{min-height:100%}
 body{
   background:var(--papel);color:var(--texto);
@@ -80,7 +80,13 @@ header{
 .cruz img{width:34px;height:34px;object-fit:contain;display:block}
 .brand h1{font-family:var(--mono);font-size:18px;letter-spacing:.01em;color:var(--tinta);line-height:1.05}
 .brand small{display:block;font-family:var(--sans);font-weight:500;font-size:10.5px;color:var(--suave);letter-spacing:.10em;text-transform:uppercase;margin-top:3px}
-#btnTema{margin-left:auto;font-size:20px;padding:8px 10px;border-radius:var(--r1);color:var(--suave)}
+.brand h1{flex:1;min-width:0}
+.brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modo-sel{margin-left:auto;display:flex;flex:none;border:1px solid var(--linea);border-radius:var(--rpill);background:var(--tarjeta);overflow:hidden;box-shadow:var(--sombra)}
+.modo-sel button{padding:6px 11px;font-size:11.5px;font-weight:600;color:var(--suave);letter-spacing:.02em}
+.modo-sel button[aria-pressed="true"]{background:var(--tinta);color:var(--sobre-tinta)}
+@media(max-width:400px){.modo-sel button{padding:6px 8px;font-size:10.5px}}
+#btnTema{font-size:20px;padding:8px 10px;border-radius:var(--r1);color:var(--suave)}
 #btnTema:hover{background:var(--papel2);color:var(--tinta)}
 .buscar{padding:0 var(--s4) var(--s3)}
 .buscar input{
@@ -255,6 +261,10 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
   <div class="brand">
     <div class="cruz" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></div>
     <h1>Cancionero<small>Nueva Alianza · San Roberto · 2026</small></h1>
+    <div class="modo-sel" role="group" aria-label="Cambiar entre Asambleas y Misa">
+      <button id="modoAsam" aria-pressed="true">Asambleas</button>
+      <button id="modoMisa" aria-pressed="false">Misa</button>
+    </div>
     <button id="btnTema" title="Cambiar modo claro / oscuro" aria-label="Cambiar modo claro u oscuro">◐</button>
   </div>
   <div class="buscar">
@@ -340,10 +350,15 @@ const EMBEDDED = null; /* ==EMBED-SLOT== */
 let SONGS = [];
 const EMBEDDED_MIXES = null; /* ==EMBED-MIXES== */
 let MIXES = [];
-const SECCIONES = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón","Entrega"];
+const SECC_ASAMBLEAS = ["Alabanza","Adoración","Exaltación","Espíritu Santo","María","Desagravio","Perdón","Entrega"];
+const SECC_MISA = ["Entrada","Gloria","Salmo","Aclamación","Ofertorio","Santo","Cordero","Comunión","Salida"];
+/* nombre largo para cabeceras (los chips usan el corto) */
+const ETIQUETA = {"Salmo":"Salmo Responsorial","Aclamación":"Aclamación al Evangelio","Cordero":"Cordero de Dios"};
 const COLOR = {
   "Alabanza":"#D9912F","Adoración":"#7E5BA6","Exaltación":"#C84B31",
-  "Espíritu Santo":"#D1495B","María":"#4D7FBF","Desagravio":"#5E6B72","Perdón":"#5F8E6E","Entrega":"#3A8A7E"
+  "Espíritu Santo":"#D1495B","María":"#4D7FBF","Desagravio":"#5E6B72","Perdón":"#5F8E6E","Entrega":"#3A8A7E",
+  "Entrada":"#B5860D","Gloria":"#6B4CA0","Salmo":"#2E7D6A","Aclamación":"#2464A4","Ofertorio":"#C07030",
+  "Santo":"#8B2040","Cordero":"#904858","Comunión":"#8F2626","Salida":"#3A6E6E"
 };
 
 /* ---------- almacenamiento seguro ---------- */
@@ -354,6 +369,10 @@ const store = {
 let fsMax = store.get('fsMax', 16);
 document.documentElement.style.setProperty('--fs', fsMax+'px');
 if (store.get('tema','claro')==='oscuro') document.documentElement.dataset.theme='oscuro';
+
+/* ---------- libro activo: asambleas o misa ---------- */
+let modo = store.get('modo','asambleas');
+function seccionesModo(){ return modo==='misa' ? SECC_MISA : SECC_ASAMBLEAS; }
 
 /* ---------- utilidades ---------- */
 const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -498,14 +517,32 @@ async function publicarMixes(msg){
 /* ---------- índice ---------- */
 const $lista=document.getElementById('lista'), $q=document.getElementById('q'), $chips=document.getElementById('chips');
 let filtroSec='Todas';
-const chipDefs=['📅 Ensayo','♫ Mixes','Todas',...SECCIONES];
-chipDefs.forEach(c=>{
-  const b=document.createElement('button');
-  b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
-  b.innerHTML = COLOR[c] ? `<span class="dot" style="background:${COLOR[c]}"></span>${c}` : c;
-  b.onclick=()=>{ filtroSec=c; [...$chips.children].forEach(x=>x.setAttribute('aria-pressed', x===b)); render(); };
-  $chips.appendChild(b);
-});
+function pintarChips(){
+  $chips.innerHTML='';
+  const defs = modo==='misa'
+    ? ['📅 Ensayo','Todas',...SECC_MISA]
+    : ['📅 Ensayo','♫ Mixes','Todas',...SECC_ASAMBLEAS];
+  defs.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='chip'; b.setAttribute('aria-pressed', c===filtroSec);
+    b.innerHTML = COLOR[c] ? `<span class="dot" style="background:${COLOR[c]}"></span>${c}` : c;
+    b.onclick=()=>{ filtroSec=c; [...$chips.children].forEach(x=>x.setAttribute('aria-pressed', x===b)); render(); };
+    $chips.appendChild(b);
+  });
+}
+pintarChips();
+function setModo(m){
+  if (m===modo) return;
+  modo=m; store.set('modo', m);
+  filtroSec='Todas'; $q.value='';
+  document.getElementById('modoAsam').setAttribute('aria-pressed', String(m==='asambleas'));
+  document.getElementById('modoMisa').setAttribute('aria-pressed', String(m==='misa'));
+  pintarChips(); render(); ajustarHeader();
+}
+document.getElementById('modoAsam').onclick=()=>setModo('asambleas');
+document.getElementById('modoMisa').onclick=()=>setModo('misa');
+document.getElementById('modoAsam').setAttribute('aria-pressed', String(modo==='asambleas'));
+document.getElementById('modoMisa').setAttribute('aria-pressed', String(modo==='misa'));
 
 function fila(s){
   const div=document.createElement('div');
@@ -531,23 +568,28 @@ function fila(s){
 function render(){
   if (filtroSec==='📅 Ensayo'){ renderEnsayo(); return; }
   if (filtroSec==='♫ Mixes'){ renderMixes(); return; }
+  const secs=seccionesModo();
   const q=norm($q.value.trim());
   const palabras=q.split(/\s+/).filter(Boolean);
   let canciones=SONGS.filter(s=>{
-    if (SECCIONES.includes(filtroSec) && s.section!==filtroSec) return false;
+    if (!secs.includes(s.section)) return false;
+    if (secs.includes(filtroSec) && s.section!==filtroSec) return false;
     if (palabras.length && !palabras.every(p=>s._busq.includes(p))) return false;
     return true;
   });
   $lista.innerHTML='';
   if (!canciones.length){
-    $lista.innerHTML='<div class="vacio">No se encontró ninguna canción.<br>Prueba con otra palabra o revisa la sección elegida.</div>';
+    const sinMisa = modo==='misa' && !SONGS.some(s=>SECC_MISA.includes(s.section));
+    $lista.innerHTML = sinMisa
+      ? '<div class="vacio">Aún no hay canciones de Misa.<br>Usa el botón <b>✎ Editar</b> al final de la página para agregarlas.</div>'
+      : '<div class="vacio">No se encontró ninguna canción.<br>Prueba con otra palabra o revisa la sección elegida.</div>';
     return;
   }
-  SECCIONES.forEach(sec=>{
+  secs.forEach(sec=>{
     const del=canciones.filter(s=>s.section===sec);
     if (!del.length) return;
     const h=document.createElement('div'); h.className='sec-h';
-    h.innerHTML=`<span class="cinta" style="background:${COLOR[sec]}"></span><h2>${sec}</h2><span>${del.length}</span>`;
+    h.innerHTML=`<span class="cinta" style="background:${COLOR[sec]}"></span><h2>${ETIQUETA[sec]||sec}</h2><span>${del.length}</span>`;
     $lista.appendChild(h);
     del.forEach(s=>$lista.appendChild(fila(s)));
   });
@@ -577,8 +619,8 @@ function cancionesEnsayo(fecha){
   // Número de semana desde época fija (sábado 4 ene 2025)
   const EPOCH=new Date(2025,0,4);
   const wk=Math.round((fecha-EPOCH)/(7*24*3600*1000));
-  // Cuota base — 12 canciones siempre
-  const cuota={Alabanza:2,Adoración:2,Exaltación:3,'Espíritu Santo':2,María:1};
+  // Cuota base (9) + 3 lugares rotativos = 12 canciones siempre
+  const cuota={Alabanza:2,Adoración:2,Exaltación:2,'Espíritu Santo':2,María:1};
   // Desagravio (1 canción): aparece 1 de cada 4 semanas; el resto → +1 Alabanza
   if(wk%4===0) cuota.Desagravio=1; else cuota.Alabanza++;
   // Perdón (2 canciones): aparece 1 de cada 2 semanas; el resto → +1 Exaltación
@@ -594,15 +636,31 @@ function cancionesEnsayo(fecha){
   }
   return out;
 }
+/* Ensayo de Misa: una canción por momento litúrgico, en orden de la misa */
+function cancionesEnsayoMisa(fecha){
+  const seed=((fecha.getFullYear()*10000+(fecha.getMonth()+1)*100+fecha.getDate())^0x5A17)|0;
+  const rand=seededRand(seed);
+  const out=[];
+  for(const sec of SECC_MISA){
+    const pool=SONGS.filter(s=>s.section===sec);
+    if(!pool.length) continue;
+    out.push(pool[Math.floor(rand()*pool.length)]);
+  }
+  return out;
+}
 const MESES_ES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 function fmtFecha(d){ return `${d.getDate()} de ${MESES_ES[d.getMonth()]} de ${d.getFullYear()}`; }
 function esHoy(d){ const h=new Date(); return d.getDate()===h.getDate()&&d.getMonth()===h.getMonth()&&d.getFullYear()===h.getFullYear(); }
 
 function renderEnsayo(){
   $lista.innerHTML='';
+  if (modo==='misa' && !SONGS.some(s=>SECC_MISA.includes(s.section))){
+    $lista.innerHTML='<div class="vacio">Aún no hay canciones de Misa para armar el ensayo.<br>Agrega canciones a las secciones de Misa primero.</div>';
+    return;
+  }
   const sabados=proximosSabados(3);
   sabados.forEach((sab,si)=>{
-    const canciones=cancionesEnsayo(sab);
+    const canciones=modo==='misa'?cancionesEnsayoMisa(sab):cancionesEnsayo(sab);
     const bloque=document.createElement('div'); bloque.className='ensayo-sab';
     const h3=document.createElement('h3');
     const etiq=esHoy(sab)?'Hoy':si===0?'Próximo':'';
@@ -615,7 +673,7 @@ function renderEnsayo(){
       const cinta=`<span style="display:inline-block;width:4px;height:13px;border-radius:2px;background:${COLOR[s.section]};vertical-align:-2px;margin-right:6px"></span>`;
       btn.innerHTML=cinta+s.title+(s.author?`<span class="ensayo-autor">${s.author}</span>`:'');
       btn.onclick=()=>{ enMix=null; abrir(s.id); };
-      const sec=document.createElement('span'); sec.className='ensayo-sec'; sec.textContent=s.section;
+      const sec=document.createElement('span'); sec.className='ensayo-sec'; sec.textContent=ETIQUETA[s.section]||s.section;
       row.appendChild(num); row.appendChild(btn); row.appendChild(sec);
       bloque.appendChild(row);
     });
@@ -753,7 +811,7 @@ function abrir(id){
   document.getElementById('cTitulo').textContent=s.title;
   document.getElementById('cAutor').textContent=s.author||'';
   document.getElementById('cAutor').style.display=s.author?'':'none';
-  document.getElementById('cSeccion').textContent=s.section;
+  document.getElementById('cSeccion').textContent=ETIQUETA[s.section]||s.section;
   document.getElementById('cPag').textContent='· pág. '+s.page;
   document.getElementById('cCinta').style.background=COLOR[s.section];
   $vista.classList.add('abierta');
@@ -931,7 +989,10 @@ const $editor=document.getElementById('editor'),
       $edSeccion=document.getElementById('edSeccion'), $edCuerpo=document.getElementById('edCuerpo'),
       $edPreview=document.getElementById('edPreview'), $edMsg=document.getElementById('edMsg'),
       $edTitulo=document.getElementById('edTitulo');
-SECCIONES.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; $edSeccion.appendChild(o); });
+function pintarOpcionesSeccion(){
+  $edSeccion.innerHTML='';
+  seccionesModo().forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=ETIQUETA[s]||s; $edSeccion.appendChild(o); });
+}
 
 let edOverrides = {};   // {indiceLinea: 'c'|'l'} forzado por el usuario
 function edLineas(){
@@ -957,9 +1018,10 @@ $edPreview.addEventListener('click', e=>{
 function abrirEditor(id){
   editando = id;
   edOverrides = {}; $edMsg.className='ed-msg'; $edMsg.textContent='';
+  pintarOpcionesSeccion();
   if (id==null){
     $edTitulo.textContent='Nueva canción';
-    $edTitle.value=''; $edAutor.value=''; $edSeccion.value=SECCIONES[0]; $edCuerpo.value='';
+    $edTitle.value=''; $edAutor.value=''; $edSeccion.value=seccionesModo()[0]; $edCuerpo.value='';
   } else {
     const s=SONGS[id];
     $edTitulo.textContent='Editar canción';
