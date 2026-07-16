@@ -25798,5 +25798,785 @@
         "t": "Danos la paz -2-"
       }
     ]
+  },
+  {
+    "title": "Aleluya mi canto",
+    "author": "",
+    "section": "Aleluya",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Lam     Sol       Fa    Mi"
+      },
+      {
+        "k": "l",
+        "t": "Aleluya Aleluya A le lu ya  (2)"
+      }
+    ]
+  },
+  {
+    "title": "Gloria al Señor",
+    "author": "Música Católica",
+    "section": "Gloria",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Re"
+      },
+      {
+        "k": "l",
+        "t": "Gloria al Señor"
+      },
+      {
+        "k": "c",
+        "t": "    La7         Re"
+      },
+      {
+        "k": "l",
+        "t": "Que reina en el Cielo"
+      },
+      {
+        "k": "c",
+        "t": "     Sol       Re"
+      },
+      {
+        "k": "l",
+        "t": "Y en la tierra paz"
+      },
+      {
+        "k": "c",
+        "t": "      La7             Re"
+      },
+      {
+        "k": "l",
+        "t": "A los hombres que ama el."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "Señor te alabamos,"
+      },
+      {
+        "k": "l",
+        "t": "Señor te bendecimos,"
+      },
+      {
+        "k": "l",
+        "t": "todos te adoramos,"
+      },
+      {
+        "k": "l",
+        "t": "gracias por Tu Gloria."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "Tu eres el Cordero,"
+      },
+      {
+        "k": "l",
+        "t": "que quitas el pecado."
+      },
+      {
+        "k": "l",
+        "t": "Ten piedad de nosotros,"
+      },
+      {
+        "k": "l",
+        "t": "y escuchas nuestra oración."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "Tu solo eres Santo,"
+      },
+      {
+        "k": "l",
+        "t": "Tu solo el altísimo,"
+      },
+      {
+        "k": "l",
+        "t": "con el Espíritu Santo,"
+      },
+      {
+        "k": "l",
+        "t": "en la Gloria de Dios Padre."
+      }
+    ]
+  },
+  {
+    "title": "Gloria al Señor (Panamericano)",
+    "author": "",
+    "section": "Gloria",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Do        Sol7   Do7"
+      },
+      {
+        "k": "l",
+        "t": "Gloria al Señor"
+      },
+      {
+        "k": "c",
+        "t": "        Do"
+      },
+      {
+        "k": "l",
+        "t": "Que reina en el cielo"
+      },
+      {
+        "k": "c",
+        "t": "      Sol7      Do"
+      },
+      {
+        "k": "l",
+        "t": "Y en la tierra paz"
+      },
+      {
+        "k": "c",
+        "t": "                        Do"
+      },
+      {
+        "k": "l",
+        "t": "A los hombres que ama el."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Do          Sol7  Do"
+      },
+      {
+        "k": "l",
+        "t": "Señor te alabamos"
+      },
+      {
+        "k": "c",
+        "t": "  Sol7        Do7"
+      },
+      {
+        "k": "l",
+        "t": "Señor te bendecimos"
+      },
+      {
+        "k": "c",
+        "t": "Fa      Do"
+      },
+      {
+        "k": "l",
+        "t": "todos te adoramos"
+      },
+      {
+        "k": "c",
+        "t": " Sol7    Do"
+      },
+      {
+        "k": "l",
+        "t": "gracias por tu gloria."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Do          Sol7  Do"
+      },
+      {
+        "k": "l",
+        "t": "Tu eres el cordero"
+      },
+      {
+        "k": "c",
+        "t": " Sol7        Do"
+      },
+      {
+        "k": "l",
+        "t": "que quitas el pecado"
+      },
+      {
+        "k": "c",
+        "t": "Fa      Do7"
+      },
+      {
+        "k": "l",
+        "t": "ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": " Sol7"
+      },
+      {
+        "k": "l",
+        "t": "y escucha nuestra oración."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Do          Sol7  Do"
+      },
+      {
+        "k": "l",
+        "t": "Tu solo eres Santo"
+      },
+      {
+        "k": "c",
+        "t": "                    Do7"
+      },
+      {
+        "k": "l",
+        "t": "tu solo el Altísimo"
+      },
+      {
+        "k": "c",
+        "t": "Fa            Do"
+      },
+      {
+        "k": "l",
+        "t": "con el Espíritu Santo"
+      },
+      {
+        "k": "c",
+        "t": " Sol7"
+      },
+      {
+        "k": "l",
+        "t": "en la gloria de Dios Padre."
+      }
+    ]
+  },
+  {
+    "title": "Señor ten piedad",
+    "author": "",
+    "section": "Piedad",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Rem        La7           Rem"
+      },
+      {
+        "k": "l",
+        "t": "Señor ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "Rem        La7       Rem"
+      },
+      {
+        "k": "l",
+        "t": "Señor ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "    Solm      Do      Fa  Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      },
+      {
+        "k": "c",
+        "t": "     Solm    La7            Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Rem        La7           Rem"
+      },
+      {
+        "k": "l",
+        "t": "Cristo ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "Rem        La7       Rem"
+      },
+      {
+        "k": "l",
+        "t": "Cristo ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "    Solm      Do      Fa  Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      },
+      {
+        "k": "c",
+        "t": "     Solm    La7            Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Rem        La7           Rem"
+      },
+      {
+        "k": "l",
+        "t": "Señor ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "Rem        La7       Rem"
+      },
+      {
+        "k": "l",
+        "t": "Señor ten piedad de nosotros"
+      },
+      {
+        "k": "c",
+        "t": "    Solm      Do      Fa  Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      },
+      {
+        "k": "c",
+        "t": "     Solm    La7            Rem"
+      },
+      {
+        "k": "l",
+        "t": "De nosotros Señor ten piedad,"
+      }
+    ]
+  },
+  {
+    "title": "Señor ten piedad (niños)",
+    "author": "",
+    "section": "Piedad",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Lam"
+      },
+      {
+        "k": "l",
+        "t": "Tú que siempre nos perdonas"
+      },
+      {
+        "k": "c",
+        "t": "Mim              Lam"
+      },
+      {
+        "k": "l",
+        "t": "porque nos quieres mucho"
+      },
+      {
+        "k": "c",
+        "t": "Rem           Lam"
+      },
+      {
+        "k": "l",
+        "t": "tú que siempre nos perdonas"
+      },
+      {
+        "k": "c",
+        "t": "   Mim    Lam"
+      },
+      {
+        "k": "l",
+        "t": "Señor ten piedad."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "– escuchas… Cristo"
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "– ayudas…… Señor"
+      }
+    ]
+  },
+  {
+    "title": "Señor ten piedad (Juan Diego)",
+    "author": "",
+    "section": "Piedad",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Fa      Do      Fa"
+      },
+      {
+        "k": "l",
+        "t": "Señor---ten piedad  -2-"
+      },
+      {
+        "k": "c",
+        "t": "Si   Do        Fa"
+      },
+      {
+        "k": "l",
+        "t": "Cristo ten piedad, ten piedad"
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "l",
+        "t": "[falta el resto: la foto se corta aquí]"
+      }
+    ]
+  },
+  {
+    "title": "Venimos hoy a tu altar",
+    "author": "",
+    "section": "Entrada",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Sol                          Sim"
+      },
+      {
+        "k": "l",
+        "t": "Venimos hoy a tu altar"
+      },
+      {
+        "k": "c",
+        "t": "  Do        Re7    Sol"
+      },
+      {
+        "k": "l",
+        "t": "a cantarte Señor"
+      },
+      {
+        "k": "c",
+        "t": "Re7             Sol"
+      },
+      {
+        "k": "l",
+        "t": "pues tu eres la alegría"
+      },
+      {
+        "k": "c",
+        "t": "           Sol"
+      },
+      {
+        "k": "l",
+        "t": "de nuestro corazón."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim                   Lam"
+      },
+      {
+        "k": "l",
+        "t": "Tú hiciste los cielos, los llenas de estrellas"
+      },
+      {
+        "k": "c",
+        "t": "   Re7   Lam"
+      },
+      {
+        "k": "l",
+        "t": "de luz y calor."
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim"
+      },
+      {
+        "k": "l",
+        "t": "Tú pintaste la aurora hiciste las nubes"
+      },
+      {
+        "k": "c",
+        "t": "    Re7"
+      },
+      {
+        "k": "l",
+        "t": "las puestas del sol."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim                Lam"
+      },
+      {
+        "k": "l",
+        "t": "Tú creaste la risa, la paz y la dicha"
+      },
+      {
+        "k": "c",
+        "t": "    Re7"
+      },
+      {
+        "k": "l",
+        "t": "la felicidad."
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim                     Lam"
+      },
+      {
+        "k": "l",
+        "t": "Tú al darnos la vida, nos das tu riqueza,"
+      },
+      {
+        "k": "c",
+        "t": "    Re7"
+      },
+      {
+        "k": "l",
+        "t": "tu eterna amistad."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim                    Lam"
+      },
+      {
+        "k": "l",
+        "t": "Tú nos diste a tu Madre, nos diste tu cuerpo"
+      },
+      {
+        "k": "c",
+        "t": "    Re7"
+      },
+      {
+        "k": "l",
+        "t": "tu sangre en manjar."
+      },
+      {
+        "k": "c",
+        "t": "Sol            Mim"
+      },
+      {
+        "k": "l",
+        "t": "Tú nos diste esperanza, la fe y nos hiciste"
+      },
+      {
+        "k": "c",
+        "t": "    Re7"
+      },
+      {
+        "k": "l",
+        "t": "capaces de amar."
+      }
+    ]
+  },
+  {
+    "title": "Bendito seas Señor",
+    "author": "",
+    "section": "Ofertorio",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "La              Mi           Fa#m"
+      },
+      {
+        "k": "l",
+        "t": "Hemos entregado nuestras vidas al Señor,"
+      },
+      {
+        "k": "c",
+        "t": "Re                              La   Mi"
+      },
+      {
+        "k": "l",
+        "t": "no hay mayor bendición que ser de Él."
+      },
+      {
+        "k": "c",
+        "t": "La        Mi                Fa#m"
+      },
+      {
+        "k": "l",
+        "t": "Hemos entregado nuestras vidas al Señor,"
+      },
+      {
+        "k": "c",
+        "t": "Re              Mi   La    Fa#m"
+      },
+      {
+        "k": "l",
+        "t": "Y Él ahora nos da la vida eterna."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "Fa#m                              Re"
+      },
+      {
+        "k": "l",
+        "t": "Bendito seas Señor por este pan"
+      },
+      {
+        "k": "c",
+        "t": "Mi                    La        Mi"
+      },
+      {
+        "k": "l",
+        "t": "fruto de la tierra y del trabajo del hombre."
+      },
+      {
+        "k": "c",
+        "t": "Fa#m                    Re"
+      },
+      {
+        "k": "l",
+        "t": "Bendito seas Señor por este vino"
+      },
+      {
+        "k": "c",
+        "t": "Mi                    La        Mi"
+      },
+      {
+        "k": "l",
+        "t": "que hemos recibido de tu amor y bondad."
+      },
+      {
+        "k": "b",
+        "t": ""
+      },
+      {
+        "k": "c",
+        "t": "La                          Fa#m"
+      },
+      {
+        "k": "l",
+        "t": "Y ahora Señor te presentamos el pan"
+      },
+      {
+        "k": "c",
+        "t": "Re                    Mi"
+      },
+      {
+        "k": "l",
+        "t": "y el vino que tú convertirás"
+      },
+      {
+        "k": "c",
+        "t": "La          Mi           Fa#m"
+      },
+      {
+        "k": "l",
+        "t": "en el cuerpo y sangre de tu Hijo Jesús,"
+      },
+      {
+        "k": "c",
+        "t": "Re              Mi   La    Mi"
+      },
+      {
+        "k": "l",
+        "t": "pan de vida y bebida de salvación."
+      }
+    ]
+  },
+  {
+    "title": "Santo, santo, santo es el Señor",
+    "author": "",
+    "section": "Santo",
+    "page": 0,
+    "lines": [
+      {
+        "k": "c",
+        "t": "Re    Sim  Mim       La7"
+      },
+      {
+        "k": "l",
+        "t": "Santo, santo, santo es el Señor"
+      },
+      {
+        "k": "c",
+        "t": "Re    Sim  Mim  La7"
+      },
+      {
+        "k": "l",
+        "t": "Dios Poderoso del Universo."
+      },
+      {
+        "k": "c",
+        "t": "Re            Sim              Mim           La7"
+      },
+      {
+        "k": "l",
+        "t": "Los cielos y la tierra, están llenos de tu gloria."
+      },
+      {
+        "k": "c",
+        "t": "Re    Sim   Mim      La7 Re"
+      },
+      {
+        "k": "l",
+        "t": "Hosana, hosana, hosana en el cielo. (2)"
+      },
+      {
+        "k": "c",
+        "t": "Mim       La7 Re Sim  Mim  La7"
+      },
+      {
+        "k": "l",
+        "t": "Bendito el que viene en el nombre del Señor."
+      },
+      {
+        "k": "c",
+        "t": "Re    Sim   Mim  La7 Re"
+      },
+      {
+        "k": "l",
+        "t": "Hosana, hosana, hosana en el cielo. (2)"
+      }
+    ]
   }
 ]
