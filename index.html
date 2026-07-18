@@ -178,6 +178,9 @@ main{max-width:680px;margin:0 auto;padding:var(--s3) var(--s3) 64px}
 #btnAcordes{border:1px solid var(--linea);border-radius:var(--r1);background:var(--tarjeta);padding:8px 13px;font-size:12px;color:var(--texto);box-shadow:var(--sombra);font-weight:600}
 #btnAcordes:hover{background:var(--papel2)}
 #btnAcordes[aria-pressed="false"]{color:var(--suave);text-decoration:line-through;font-weight:400}
+#btnGuardarTono{display:none;border:1px solid var(--tinta);border-radius:var(--r1);background:var(--tinta);color:var(--sobre-tinta);padding:8px 13px;font-size:12px;font-weight:600;box-shadow:var(--sombra)}
+#btnGuardarTono:hover{filter:brightness(1.1)}
+#btnGuardarTono[disabled]{opacity:.6}
 .hoja-wrap{padding:var(--s1) var(--s5) 96px;max-width:760px;margin:0 auto;width:100%}
 .hoja{
   font-family:var(--mono);
@@ -305,6 +308,7 @@ footer b{color:var(--tinta);font-family:var(--mono);font-weight:700}
         <button id="fMas" aria-label="Agrandar letra" style="font-size:17px">A＋</button>
       </div>
       <button id="btnAcordes" aria-pressed="true">Acordes</button>
+      <button id="btnGuardarTono" title="Guardar este tono como el original de la canción">💾 Guardar tono</button>
     </div>
     <div class="hoja-wrap"><pre class="hoja" id="hoja"></pre></div>
     <div class="mix-nav" id="mixNav"></div>
@@ -792,8 +796,41 @@ function pintarHoja(){
     return `<span class="${l.k==='c'?'c':'l'}">${esc}</span>\n`;
   }).join('');
   document.getElementById('tVal').textContent = trans===0 ? 'original' : (trans>0?'+':'')+trans;
+  actualizarBotonGuardarTono();
   ajustarHoja();
 }
+function actualizarBotonGuardarTono(){
+  const btn = document.getElementById('btnGuardarTono');
+  btn.style.display = (editMode && PUEDE_EDITAR && trans!==0) ? 'inline-block' : 'none';
+}
+async function guardarTonoOriginal(){
+  if (!editMode || trans===0) return;
+  const s = SONGS[actual];
+  const cambio = (trans>0?'+':'')+trans;
+  if (!confirm('¿Guardar «'+s.title+'» con el tono actual ('+cambio+') como el tono original?\nSe reemplazan los acordes guardados y se publica el cambio.')) return;
+  const btn = document.getElementById('btnGuardarTono');
+  const txtOriginal = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  const respaldo = SONGS.map(limpiarSong);
+  const transPrevio = trans;
+  const nuevasLineas = s.lines.map(l => l.k==='c' ? {k:'c', t:transponerLinea(l.t, transPrevio)} : l);
+  SONGS[actual] = {...s, lines:nuevasLineas, id:actual};
+  reindexar();
+  trans = 0;
+  try{
+    await publicar('Tono: '+s.title);
+    pintarHoja();
+    btn.textContent = '✓ Guardado';
+    setTimeout(()=>{ btn.textContent = txtOriginal; btn.disabled=false; actualizarBotonGuardarTono(); }, 2000);
+  }catch(e){
+    restaurar(respaldo);
+    trans = transPrevio;
+    pintarHoja();
+    alert(mensajeError(e));
+    btn.textContent = txtOriginal; btn.disabled=false;
+  }
+}
+document.getElementById('btnGuardarTono').onclick = guardarTonoOriginal;
 /* Reduce el tamaño de la hoja hasta que la línea más larga entre en el ancho
    disponible (conserva monoespaciado y alineación). fsMax es el tope preferido. */
 function ajustarHoja(){
