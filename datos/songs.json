@@ -430,7 +430,7 @@
   "page": 9,
   "lines": [
    {
-    "k": "l",
+    "k": "c",
     "t": "//F Dm/E-Dm-E//"
    },
    {
@@ -494,6 +494,26 @@
     "t": ""
    },
    {
+    "k": "c",
+    "t": "E           Am               G          Dm"
+   },
+   {
+    "k": "l",
+    "t": "Canta, Canta,   oh hija de Sión regocíjate Israel"
+   },
+   {
+    "k": "c",
+    "t": "E             Am           F       Dm      E"
+   },
+   {
+    "k": "l",
+    "t": "Canta y danza,   con todo el corazón  hija de Jerusalén."
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
     "k": "l",
     "t": "El Señor tu Dios en medio de ti, poderoso es,"
    },
@@ -520,6 +540,14 @@
    {
     "k": "l",
     "t": "Él se gozará, cantará por ti, callará de amor y te salvará."
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "l",
+    "t": "(Coro en hebreo)"
    },
    {
     "k": "b",
@@ -528,18 +556,6 @@
    {
     "k": "l",
     "t": "(Coro en español)"
-   },
-   {
-    "k": "b",
-    "t": ""
-   },
-   {
-    "k": "l",
-    "t": "(Coro en hebreo)"
-   },
-   {
-    "k": "b",
-    "t": ""
    }
   ]
  },
