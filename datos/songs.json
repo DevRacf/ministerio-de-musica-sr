@@ -22538,7 +22538,7 @@
   "page": 118,
   "lines": [
    {
-    "k": "c",
+    "k": "l",
     "t": "Intro: //G-Em-C-D// (en La segunda vuelta e"
    },
    {
@@ -22547,11 +22547,11 @@
    },
    {
     "k": "c",
-    "t": "G              Am"
+    "t": "G                   Am"
    },
    {
     "k": "l",
-    "t": "//Algo cayendo aquí"
+    "t": "//Algo esta cayendo aquí"
    },
    {
     "k": "c",
@@ -22623,11 +22623,11 @@
    },
    {
     "k": "c",
-    "t": "G              Am"
+    "t": "G                  Am"
    },
    {
     "k": "l",
-    "t": " Algo cayendo aquí"
+    "t": " Algo esta cayendo aquí"
    },
    {
     "k": "c",
@@ -22698,7 +22698,7 @@
     "t": ""
    },
    {
-    "k": "c",
+    "k": "l",
     "t": "ntra percusión)"
    }
   ]
