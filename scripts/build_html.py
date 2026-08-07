@@ -167,7 +167,7 @@ footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
   <div id="lista"></div>
   <footer>
     Ministerio de Música <b>Nueva Alianza</b> · Sector San Roberto Abad<br>
-    __COUNT__ canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
+    103 canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
   </footer>
 </main>
 
@@ -367,7 +367,7 @@ if (m && SONGS[+m[1]]) abrir(+m[1]);
 </html>
 """
 
-out = HTML.replace('__DATA__', DATA).replace('__COUNT__', str(len(songs)))
+out = HTML.replace('__DATA__', DATA)
 path = 'salida/Cancionero_Nueva_Alianza_San_Roberto.html'
 with open(path, 'w', encoding='utf-8') as f:
     f.write(out)
