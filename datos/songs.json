@@ -27195,31 +27195,31 @@
   "lines": [
    {
     "k": "c",
-    "t": "D                A"
+    "t": "D             A"
    },
    {
     "k": "l",
-    "t": "Junto a Ti, María,"
+    "t": "Junto a Ti María,"
    },
    {
     "k": "c",
-    "t": "Bm               F#m"
+    "t": "        Bm            F#m"
    },
    {
     "k": "l",
-    "t": "como un niño quiero estar."
+    "t": "como un niño quiero estar"
    },
    {
     "k": "c",
-    "t": "G             D"
+    "t": " G              D"
    },
    {
     "k": "l",
-    "t": "Tómame en tus manos,"
+    "t": "Tómame en tus brazos,"
    },
    {
     "k": "c",
-    "t": "Em            A7"
+    "t": "    Em            A7"
    },
    {
     "k": "l",
@@ -27235,7 +27235,7 @@
    },
    {
     "k": "c",
-    "t": "Bm             F#m   G"
+    "t": "          Bm        F#m"
    },
    {
     "k": "l",
@@ -27243,11 +27243,19 @@
    },
    {
     "k": "c",
-    "t": "D                   Em      A7 D"
+    "t": " G            D"
    },
    {
     "k": "l",
-    "t": "hazme transparente, lléname de paz."
+    "t": "hazme transparente,"
+   },
+   {
+    "k": "c",
+    "t": "  Em  A7     D"
+   },
+   {
+    "k": "l",
+    "t": "lléname de paz."
    },
    {
     "k": "b",
@@ -27255,19 +27263,19 @@
    },
    {
     "k": "c",
-    "t": "D  A  Bm   F#m  G"
+    "t": "D   A  Bm F#m  G  D   Em  A7"
    },
    {
     "k": "l",
-    "t": "Madre,           Madre."
+    "t": "Madre, Madre, Madre, Madre."
    },
    {
     "k": "c",
-    "t": "D    Em   A7      D"
+    "t": "D   A  Bm F#m  G  D   Em  A7  D"
    },
    {
     "k": "l",
-    "t": "Madre,           Madre."
+    "t": "Madre, Madre, Madre, Madre."
    }
   ]
  },
