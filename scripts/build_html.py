@@ -167,7 +167,7 @@ footer b{color:var(--tinta);font-family:ui-monospace,monospace;font-weight:700}
   <div id="lista"></div>
   <footer>
     Ministerio de Música <b>Nueva Alianza</b> · Sector San Roberto Abad<br>
-    103 canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
+    128 canciones · Funciona sin internet: guarda este archivo y ábrelo cuando quieras.
   </footer>
 </main>
 
