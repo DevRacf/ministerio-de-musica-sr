@@ -8515,7 +8515,7 @@
    },
    {
     "k": "l",
-    "t": "Sin nada que ofrecer más que mi canción"
+    "t": "Sin nada que entregar más que el corazón"
    },
    {
     "k": "c",
@@ -8523,7 +8523,7 @@
    },
    {
     "k": "l",
-    "t": "No tengo más  que darte pues todo es"
+    "t": "Me rindo ante ti tomame Señor"
    },
    {
     "k": "c",
@@ -8531,7 +8531,7 @@
    },
    {
     "k": "l",
-    "t": "Tuyo, Señor"
+    "t": "Tal como soy"
    },
    {
     "k": "b",
@@ -8630,12 +8630,8 @@
     "t": "                  F          Dm"
    },
    {
-    "k": "b",
-    "t": ""
-   },
-   {
     "k": "l",
-    "t": " No tengo más que darte pues todo es"
+    "t": "No tengo más  que darte pues todo es"
    },
    {
     "k": "c",
@@ -8643,15 +8639,55 @@
    },
    {
     "k": "l",
-    "t": " Tuyo, Señor"
+    "t": "Tuyo, Señor"
+   },
+   {
+    "k": "b",
+    "t": ""
    },
    {
     "k": "c",
-    "t": " C                 G"
+    "t": "C"
    },
    {
     "k": "l",
-    "t": " Acéptame  como ofrenda de amor"
+    "t": "Tal como soy, Señor"
+   },
+   {
+    "k": "c",
+    "t": "                 Am"
+   },
+   {
+    "k": "l",
+    "t": "Sin nada que entregar más que el corazón"
+   },
+   {
+    "k": "c",
+    "t": "                  F          Dm"
+   },
+   {
+    "k": "l",
+    "t": "Me rindo ante ti tomame Señor"
+   },
+   {
+    "k": "c",
+    "t": "         G7"
+   },
+   {
+    "k": "l",
+    "t": "Tal como soy"
+   },
+   {
+    "k": "b",
+    "t": ""
+   },
+   {
+    "k": "c",
+    "t": "C                 G"
+   },
+   {
+    "k": "l",
+    "t": "Acéptame  como  ofrenda de amor"
    },
    {
     "k": "c",
@@ -8659,35 +8695,59 @@
    },
    {
     "k": "l",
-    "t": " Como  un sacrificio agradable en Tu honor"
+    "t": "Como  un sacrificio agradable en Tu honor"
    },
    {
     "k": "c",
-    "t": " C"
+    "t": "C"
    },
    {
     "k": "l",
-    "t": " Grato perfume"
+    "t": "Grato perfume"
    },
    {
     "k": "c",
-    "t": " G              F"
+    "t": "G              F"
    },
    {
     "k": "l",
-    "t": " Yo quiero ser Señor"
+    "t": "Yo quiero ser Señor"
    },
    {
     "k": "b",
     "t": ""
    },
    {
-    "k": "l",
-    "t": " [revisar cuantas veces se repiten las"
+    "k": "c",
+    "t": "C                 G"
    },
    {
     "k": "l",
-    "t": " últimas dos estrofas]"
+    "t": "Acéptame  como  ofrenda de amor"
+   },
+   {
+    "k": "c",
+    "t": "       Am              F"
+   },
+   {
+    "k": "l",
+    "t": "Como  un sacrificio agradable en Tu honor"
+   },
+   {
+    "k": "c",
+    "t": "C"
+   },
+   {
+    "k": "l",
+    "t": "Grato perfume"
+   },
+   {
+    "k": "c",
+    "t": "G              F"
+   },
+   {
+    "k": "l",
+    "t": "Yo quiero ser Señor"
    }
   ]
  },
